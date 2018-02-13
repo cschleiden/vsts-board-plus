@@ -2,6 +2,7 @@ import "./board.css";
 import * as React from "react";
 import { IBoard, IPartition, IItem } from "../model/interfaces";
 import { css } from "../utils/css";
+import { DragDropContext, Droppable, DroppableProvided, DroppableStateSnapshot, Draggable } from "react-beautiful-dnd";
 // import { css } from "../utils/css";
 
 export interface IBoardProps {
@@ -19,27 +20,30 @@ export class BoardView extends React.Component<IBoardProps> {
         const numContentRows = board.verticalPartitions.reduce((c, vP) => c * vP.count, 1);
 
         return (
-            <div
-                className="board"
-                style={{
-                    gridTemplateColumns: `repeat(${numLegendColumns}, auto) repeat(${numContentColumns}, 1fr)`,
-                    gridTemplateRows: `repeat(${numLegendRows}, auto) repeat(${numContentRows}, 1fr)`
-                }}
-            >
-                {
-                    /* Legend for columns, rendered as rows */
-                    this._renderPartitions(board.horizontalPartitions, "column", numLegendColumns, numContentColumns, false)
-                }
+            // tslint:disable-next-line:no-empty
+            <DragDropContext onDragEnd={(result) => { }}>
+                <div
+                    className="board"
+                    style={{
+                        gridTemplateColumns: `repeat(${numLegendColumns}, auto) repeat(${numContentColumns}, 1fr)`,
+                        gridTemplateRows: `repeat(${numLegendRows}, auto) repeat(${numContentRows}, 1fr)`
+                    }}
+                >
+                    {
+                        /* Legend for columns, rendered as rows */
+                        this._renderPartitions(board.horizontalPartitions, "column", numLegendColumns, numContentColumns, false)
+                    }
 
-                {
-                    /* Legend for rows, rendered as columns */
-                    this._renderPartitions(board.verticalPartitions, "row", numLegendRows, numContentRows, true)
-                }
+                    {
+                        /* Legend for rows, rendered as columns */
+                        this._renderPartitions(board.verticalPartitions, "row", numLegendRows, numContentRows, true)
+                    }
 
-                {
-                    this._renderItems()
-                }
-            </div>
+                    {
+                        this._renderItems()
+                    }
+                </div>
+            </DragDropContext>
         );
     }
 
@@ -157,20 +161,43 @@ export class BoardView extends React.Component<IBoardProps> {
                 const cell = cells[+x][+y];
 
                 result.push(
-                    <div
-                        className="cell"
-                        style={{
-                            gridColumn: 1 + numLegendColumns + (+x),
-                            gridRow: 1 + numLegendRows + (+y)
-                        }}
-                    >
-                        {cell.map(item => (
-                            <div className="item" key={item.id}>
-                                {item.id}
-                                {/*JSON.stringify(item.values)*/}
+                    <Droppable droppableId={`card-${+x}-${+y}`}>
+                        {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (
+                            <div
+                                ref={provided.innerRef}
+                                className="cell"
+                                style={{
+                                    gridColumn: 1 + numLegendColumns + (+x),
+                                    gridRow: 1 + numLegendRows + (+y)
+                                }}
+                            >
+                                {cell.map(item => (
+                                    <Draggable
+                                        draggableId={`card-${item.id}`}
+                                        key={item.id}
+                                    >
+                                        {(dragProvided, dragSnapshot) => (
+                                            <div>
+                                                <div
+                                                    className="item"
+                                                    ref={dragProvided.innerRef}
+                                                    style={dragProvided.draggableStyle}
+                                                    // tslint:disable-next-line:no-any
+                                                    {...(dragProvided as any).draggableProps}
+                                                    {...dragProvided.dragHandleProps}
+                                                >
+                                                    {item.id}
+                                                </div>
+                                                {dragProvided.placeholder}
+                                            </div>
+                                        )}
+                                    </Draggable>
+                                ))}
+
+                                {provided.placeholder}
                             </div>
-                        ))}
-                    </div>
+                        )}
+                    </Droppable>
                 );
             }
         }

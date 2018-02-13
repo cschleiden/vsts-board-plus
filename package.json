@@ -3,11 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@types/prop-types": "^15.5.2",
+    "@types/react-beautiful-dnd": "^3.0.1",
+    "immuts": "^2.0.1",
     "react": "^16.2.0",
+    "react-beautiful-dnd": "^4.0.1",
     "react-dom": "^16.2.0",
     "react-scripts-ts": "2.13.0",
-    "vss-ui": "^3.127.3"
+    "redux": "^3.7.2",
+    "vss-ui": "^3.127.3",
+    "vss-web-extension-sdk": "^5.127.0"
   },
   "scripts": {
     "start": "react-scripts-ts start",
@@ -17,9 +21,12 @@
   },
   "devDependencies": {
     "@types/jest": "^22.1.1",
-    "@types/node": "^9.4.0",
+    "@types/prop-types": "^15.5.2",
     "@types/react": "^16.0.36",
     "@types/react-dom": "^16.0.3",
+    "@types/redux": "^3.6.0",
+    "react-beautiful-dnd": "^4.0.1",
+    "redux": "^3.7.2",
     "typescript": "^2.7.1"
   }
 }
