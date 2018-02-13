@@ -1,21 +1,42 @@
 .board {
     display: grid;
 
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
 
-    border: 1px solid red;
+    grid-gap: 4px;
+
+    margin: 5px;
 }
 
 .header {
-    border: 1px solid black;
+    background: #eaeaea;
 
     display: flex;
     justify-content: center;
     align-items: center;    
 }
 
+.header.column {
+    height: 24px;
+}
+
+.header.row {
+    position: relative;    
+    width: 24px;
+}
+
+.header.row .text {
+    transform: rotateZ(-90deg);
+    position: absolute;
+    width: auto;
+    white-space: nowrap;
+}
+
 .cell {
+    background: #f4f4f4;
+    border-top: 2px #c8c8c8 solid;
+
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -24,12 +45,14 @@
 }
 
 .item {
-    border: 1px solid lightgray;
-    border-left: 3px solid lightblue;    
+    border: solid 1px #c8c8c8;
+    border-left: 3px solid rgb(255, 123, 0);    
     flex-grow: 1 1 0;
 
     min-height: 60px;
     margin: 5px;
+
+    background: white;
 }
 
 .item:hover {

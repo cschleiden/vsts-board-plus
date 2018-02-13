@@ -2,11 +2,14 @@ import "./board.css";
 import * as React from "react";
 import { IBoard, IPartition, IItem } from "../model/interfaces";
 import { css } from "../utils/css";
-import { DragDropContext, Droppable, DroppableProvided, DroppableStateSnapshot, Draggable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable, DroppableProvided, DroppableStateSnapshot, Draggable, DropResult } from "react-beautiful-dnd";
+import { autobind } from "office-ui-fabric-react/lib/Utilities";
 // import { css } from "../utils/css";
 
 export interface IBoardProps {
     board: IBoard;
+
+    onCardMove(id: number, ): void;
 }
 
 export class BoardView extends React.Component<IBoardProps> {
@@ -21,7 +24,7 @@ export class BoardView extends React.Component<IBoardProps> {
 
         return (
             // tslint:disable-next-line:no-empty
-            <DragDropContext onDragEnd={(result) => { }}>
+            <DragDropContext onDragEnd={this.onDragEnd}>
                 <div
                     className="board"
                     style={{
@@ -40,7 +43,7 @@ export class BoardView extends React.Component<IBoardProps> {
                     }
 
                     {
-                        this._renderItems()
+                        this._renderItems(numContentColumns, numContentRows)
                     }
                 </div>
             </DragDropContext>
@@ -80,7 +83,9 @@ export class BoardView extends React.Component<IBoardProps> {
                                     gridRow: transpose ? first : second
                                 }}
                             >
-                                {label}
+                                <div className="text">
+                                    {label}
+                                </div>
                             </div>
                         );
                     })
@@ -91,7 +96,7 @@ export class BoardView extends React.Component<IBoardProps> {
         });
     }
 
-    private _renderItems(): JSX.Element[] {
+    private _renderItems(numContentColumns: number, numContentRows: number): JSX.Element[] {
         const { board } = this.props;
         const { items, verticalPartitions, horizontalPartitions } = board;
 
@@ -156,12 +161,14 @@ export class BoardView extends React.Component<IBoardProps> {
         const numLegendRows = horizontalPartitions.length;
 
         let result: JSX.Element[] = [];
-        for (const x of Object.keys(cells)) {
-            for (const y of Object.keys(cells[x])) {
-                const cell = cells[+x][+y];
+        // for (const x of Object.keys(cells)) {
+        for (let x = 0; x < numContentColumns; ++x) {
+            // for (const y of Object.keys(cells[x])) {
+            for (let y = 0; y < numContentRows; ++y) {
+                const cellItems = cells[+x] && cells[+x][+y] || [];
 
                 result.push(
-                    <Droppable droppableId={`card-${+x}-${+y}`}>
+                    <Droppable droppableId={`cell-${+x}-${+y}`}>
                         {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (
                             <div
                                 ref={provided.innerRef}
@@ -171,28 +178,30 @@ export class BoardView extends React.Component<IBoardProps> {
                                     gridRow: 1 + numLegendRows + (+y)
                                 }}
                             >
-                                {cell.map(item => (
-                                    <Draggable
-                                        draggableId={`card-${item.id}`}
-                                        key={item.id}
-                                    >
-                                        {(dragProvided, dragSnapshot) => (
-                                            <div>
-                                                <div
-                                                    className="item"
-                                                    ref={dragProvided.innerRef}
-                                                    style={dragProvided.draggableStyle}
-                                                    // tslint:disable-next-line:no-any
-                                                    {...(dragProvided as any).draggableProps}
-                                                    {...dragProvided.dragHandleProps}
-                                                >
-                                                    {item.id}
+                                {
+                                    cellItems.map(item => (
+                                        <Draggable
+                                            draggableId={`card-${item.id}`}
+                                            key={item.id}
+                                        >
+                                            {(dragProvided, dragSnapshot) => (
+                                                <div>
+                                                    <div
+                                                        className="item"
+                                                        ref={dragProvided.innerRef}
+                                                        style={dragProvided.draggableStyle}
+                                                        // tslint:disable-next-line:no-any
+                                                        {...(dragProvided as any).draggableProps}
+                                                        {...dragProvided.dragHandleProps}
+                                                    >
+                                                        {item.id}
+                                                    </div>
+                                                    {dragProvided.placeholder}
                                                 </div>
-                                                {dragProvided.placeholder}
-                                            </div>
-                                        )}
-                                    </Draggable>
-                                ))}
+                                            )}
+                                        </Draggable>
+                                    ))
+                                }
 
                                 {provided.placeholder}
                             </div>
@@ -203,5 +212,14 @@ export class BoardView extends React.Component<IBoardProps> {
         }
 
         return result;
+    }
+
+    @autobind
+    private onDragEnd(result: DropResult) {
+        const { onCardMove } = this.props;
+
+        if (onCardMove) {
+            onCardMove(+result.draggableId /* , result.destination.droppableId */);
+        }
     }
 }

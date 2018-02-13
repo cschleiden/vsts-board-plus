@@ -10,6 +10,7 @@
     "sourceMap": true,
     "allowJs": true,
     "jsx": "react",
+    "experimentalDecorators": true,
     "moduleResolution": "node",
     "rootDir": "src",
     "forceConsistentCasingInFileNames": true,
@@ -24,6 +25,7 @@
       "react-dom",
       "react-beautiful-dnd",
       "redux",
+      "react-redux",
       "jest"
     ]
   },

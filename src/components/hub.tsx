@@ -28,6 +28,16 @@ export class HubComponent extends React.Component<IHubComponentProps> {
                     commands={
                         [
                             {
+                                key: "refresh",
+                                name: "Refresh",
+                                important: true,
+                                disabled: false,
+                                iconProps: {
+                                    iconName: "Add"
+                                },
+                                onClick: () => alert("refresh")
+                            },
+                            {
                                 key: "create",
                                 name: "Configure board",
                                 important: true,

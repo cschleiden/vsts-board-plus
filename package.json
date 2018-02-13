@@ -24,8 +24,10 @@
     "@types/prop-types": "^15.5.2",
     "@types/react": "^16.0.36",
     "@types/react-dom": "^16.0.3",
+    "@types/react-redux": "^5.0.15",
     "@types/redux": "^3.6.0",
     "react-beautiful-dnd": "^4.0.1",
+    "react-redux": "^5.0.6",
     "redux": "^3.7.2",
     "typescript": "^2.7.1"
   }
