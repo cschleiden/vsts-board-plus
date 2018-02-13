@@ -28,8 +28,8 @@ export class BoardView extends React.Component<IBoardProps> {
                 <div
                     className="board"
                     style={{
-                        gridTemplateColumns: `repeat(${numLegendColumns}, auto) repeat(${numContentColumns}, 1fr)`,
-                        gridTemplateRows: `repeat(${numLegendRows}, auto) repeat(${numContentRows}, 1fr)`
+                        gridTemplateColumns: `repeat(${numLegendColumns}, 24px) repeat(${numContentColumns}, minmax(210px, auto))`,
+                        gridTemplateRows: `repeat(${numLegendRows}, 24px) repeat(${numContentRows}, minmax(100px, auto))`
                     }}
                 >
                     {
@@ -55,14 +55,14 @@ export class BoardView extends React.Component<IBoardProps> {
             let result: JSX.Element[] = [];
 
             // Later rows need to generate their columns multiple times
-            const numParentColumns = partitions
+            const numParentPartitions = partitions
                 .slice(0, index)
                 .reduce((c, parent) => c * parent.count, 1);
 
-            const span = numContent / (part.count * numParentColumns);
+            const span = numContent / (part.count * numParentPartitions);
 
-            // Draw current columns once per parent column
-            for (let i = 0; i < numParentColumns; ++i) {
+            // Draw current partitions once per parent column
+            for (let i = 0; i < numParentPartitions; ++i) {
                 // Draw all columns for current level
                 result.push(
                     ...part.getLegendPartitions().map((label, partIdx) => {

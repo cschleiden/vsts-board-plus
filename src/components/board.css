@@ -41,7 +41,7 @@
     flex-direction: column;
     align-items: stretch;
 
-    overflow: auto;
+    overflow: hidden;
 }
 
 .item {

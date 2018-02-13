@@ -18,7 +18,7 @@ class BoardPivot extends React.Component<IBoardPivotProps> {
         // b.addHorizontalPartition(new ItemValuePartition<string>(["A", "B"]));
 
         board.addVerticalPartition(new ItemValuePartition<string>("Parent", ["Feature 1", "Epic 2"]));
-        // b.addVerticalPartition(new ItemValuePartition<string>(["John", "Jane"]));
+        board.addVerticalPartition(new ItemValuePartition<string>("Assigned To", ["John", "Jane"]));
 
         board.items = this.props.items;
 

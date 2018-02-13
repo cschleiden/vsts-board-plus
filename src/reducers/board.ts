@@ -21,6 +21,14 @@ const initialState = makeImmutable({
             }
         },
         {
+            id: 11,
+            values: {
+                "State": "Active",
+                "IsBlocked": "Blocked",
+                "Parent": "Feature 1"
+            }
+        },
+        {
             id: 2,
             values: {
                 "State": "Resolved",
