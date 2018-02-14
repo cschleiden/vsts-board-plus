@@ -1,26 +1,31 @@
+import { autobind } from "office-ui-fabric-react/lib/Utilities";
 import "./board.css";
 import * as React from "react";
-import { IBoard, IPartition, IItem } from "../model/interfaces";
+import { IBoard, IPartitionProvider, IItem, IPartition } from "../model/interfaces";
 import { css } from "../utils/css";
 import { DragDropContext, Droppable, DroppableProvided, DroppableStateSnapshot, Draggable, DropResult } from "react-beautiful-dnd";
-import { autobind } from "office-ui-fabric-react/lib/Utilities";
-// import { css } from "../utils/css";
+
+export interface IPartitionDrop {
+    partitions: IPartition[];
+}
 
 export interface IBoardProps {
     board: IBoard;
 
-    onCardMove(id: number, ): void;
+    onCardMove(id: number, drop: IPartitionDrop): void;
 }
 
 export class BoardView extends React.Component<IBoardProps> {
+    private cellMap: { [id: string]: IPartitionDrop } = {};
+
     render() {
         const { board } = this.props;
 
-        const numLegendColumns = board.verticalPartitions.length;
-        const numLegendRows = board.horizontalPartitions.length;
+        const numLegendColumns = board.verticalPartitionProviders.length;
+        const numLegendRows = board.horizontalPartitionProviders.length;
 
-        const numContentColumns = board.horizontalPartitions.reduce((c, hP) => c * hP.count, 1);
-        const numContentRows = board.verticalPartitions.reduce((c, vP) => c * vP.count, 1);
+        const numContentColumns = board.horizontalPartitionProviders.reduce((c, hP) => c * hP.count, 1);
+        const numContentRows = board.verticalPartitionProviders.reduce((c, vP) => c * vP.count, 1);
 
         return (
             // tslint:disable-next-line:no-empty
@@ -34,12 +39,12 @@ export class BoardView extends React.Component<IBoardProps> {
                 >
                     {
                         /* Legend for columns, rendered as rows */
-                        this._renderPartitions(board.horizontalPartitions, "column", numLegendColumns, numContentColumns, false)
+                        this._renderPartitions(board.horizontalPartitionProviders, "column", numLegendColumns, numContentColumns, false)
                     }
 
                     {
                         /* Legend for rows, rendered as columns */
-                        this._renderPartitions(board.verticalPartitions, "row", numLegendRows, numContentRows, true)
+                        this._renderPartitions(board.verticalPartitionProviders, "row", numLegendRows, numContentRows, true)
                     }
 
                     {
@@ -50,7 +55,35 @@ export class BoardView extends React.Component<IBoardProps> {
         );
     }
 
-    private _renderPartitions(partitions: IPartition[], className: string, numLegend: number, numContent: number, transpose: boolean): JSX.Element[][] | null {
+    private _iteratePartitions(partitionProviders: IPartitionProvider[], callback: (partitions: IPartition[], index: number) => void) {
+        const numIterations = partitionProviders
+            .reduce((c, partitionProvider) => c * partitionProvider.count, 1);
+
+        const indexes: number[] = new Array<number>(partitionProviders.length).fill(0);
+
+        for (let i = 0; i < numIterations; ++i) {
+            callback(
+                indexes.map((index, idx) => partitionProviders[idx].getPartitions()[index]),
+                i
+            );
+
+            for (let j = indexes.length - 1; j >= 0; --j) {
+                ++indexes[j];
+                if (indexes[j] >= partitionProviders[j].count) {
+                    indexes[j] = 0;
+                } else {
+                    break;
+                }
+            }
+        }
+    }
+
+    private _renderPartitions(
+        partitions: IPartitionProvider[],
+        className: string,
+        numLegend: number,
+        numContent: number,
+        transpose: boolean): JSX.Element[][] | null {
         return partitions.map((part, index) => {
             let result: JSX.Element[] = [];
 
@@ -65,7 +98,7 @@ export class BoardView extends React.Component<IBoardProps> {
             for (let i = 0; i < numParentPartitions; ++i) {
                 // Draw all columns for current level
                 result.push(
-                    ...part.getLegendPartitions().map((label, partIdx) => {
+                    ...part.getPartitions().map((partition, partIdx) => {
                         const firstNum =
                             (1 + numLegend)
                             + (i * (part.count * span))
@@ -84,7 +117,7 @@ export class BoardView extends React.Component<IBoardProps> {
                                 }}
                             >
                                 <div className="text">
-                                    {label}
+                                    {partition.label}
                                 </div>
                             </div>
                         );
@@ -98,7 +131,7 @@ export class BoardView extends React.Component<IBoardProps> {
 
     private _renderItems(numContentColumns: number, numContentRows: number): JSX.Element[] {
         const { board } = this.props;
-        const { items, verticalPartitions, horizontalPartitions } = board;
+        const { items, verticalPartitionProviders, horizontalPartitionProviders } = board;
 
         const cells: { [x: number]: { [y: number]: IItem[] } } = {};
 
@@ -106,13 +139,13 @@ export class BoardView extends React.Component<IBoardProps> {
             // Determine horizontal placement
             let x: number | null = null;
 
-            for (let i = 0; i < horizontalPartitions.length; ++i) {
-                const p = horizontalPartitions[i].placeItem(item);
+            for (let i = 0; i < horizontalPartitionProviders.length; ++i) {
+                const p = horizontalPartitionProviders[i].placeItem(item);
                 if (p !== null) {
                     if (x === null) {
                         x = p;
                     } else {
-                        x *= horizontalPartitions[i].count;
+                        x *= horizontalPartitionProviders[i].count;
                         x += p;
                     }
                 }
@@ -126,13 +159,13 @@ export class BoardView extends React.Component<IBoardProps> {
             // Determine vertical placement
             let y: number | null = null;
 
-            for (let i = 0; i < verticalPartitions.length; ++i) {
-                const p = verticalPartitions[i].placeItem(item);
+            for (let i = 0; i < verticalPartitionProviders.length; ++i) {
+                const p = verticalPartitionProviders[i].placeItem(item);
                 if (p !== null) {
                     if (y === null) {
                         y = p;
                     } else {
-                        y *= verticalPartitions[i].count;
+                        y *= verticalPartitionProviders[i].count;
                         y += p;
                     }
                 }
@@ -157,18 +190,22 @@ export class BoardView extends React.Component<IBoardProps> {
 
         // Lay out cells
 
-        const numLegendColumns = verticalPartitions.length;
-        const numLegendRows = horizontalPartitions.length;
+        const numLegendColumns = verticalPartitionProviders.length;
+        const numLegendRows = horizontalPartitionProviders.length;
 
         let result: JSX.Element[] = [];
-        // for (const x of Object.keys(cells)) {
-        for (let x = 0; x < numContentColumns; ++x) {
-            // for (const y of Object.keys(cells[x])) {
-            for (let y = 0; y < numContentRows; ++y) {
+
+        this._iteratePartitions(board.horizontalPartitionProviders, (horizontalPartitions, x) => {
+            this._iteratePartitions(board.verticalPartitionProviders, (verticalPartitions, y) => {
                 const cellItems = cells[+x] && cells[+x][+y] || [];
 
+                const id = `${x}-${y}`;
+                this.cellMap[id] = {
+                    partitions: horizontalPartitions.concat(verticalPartitions)
+                };
+
                 result.push(
-                    <Droppable droppableId={`cell-${+x}-${+y}`}>
+                    <Droppable droppableId={id} key={id}>
                         {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (
                             <div
                                 ref={provided.innerRef}
@@ -181,7 +218,7 @@ export class BoardView extends React.Component<IBoardProps> {
                                 {
                                     cellItems.map(item => (
                                         <Draggable
-                                            draggableId={`card-${item.id}`}
+                                            draggableId={`${item.id}`}
                                             key={item.id}
                                         >
                                             {(dragProvided, dragSnapshot) => (
@@ -208,8 +245,8 @@ export class BoardView extends React.Component<IBoardProps> {
                         )}
                     </Droppable>
                 );
-            }
-        }
+            });
+        });
 
         return result;
     }
@@ -218,8 +255,11 @@ export class BoardView extends React.Component<IBoardProps> {
     private onDragEnd(result: DropResult) {
         const { onCardMove } = this.props;
 
+        const id = result.destination.droppableId;
+        const cell = this.cellMap[id];
+
         if (onCardMove) {
-            onCardMove(+result.draggableId /* , result.destination.droppableId */);
+            onCardMove(+result.draggableId, cell);
         }
     }
 }

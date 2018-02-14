@@ -9,28 +9,38 @@ export interface IEntry {
 }
 
 export interface IPartition {
+    label: string;
+
+    // TODO
+    value: string;
+}
+
+export interface IPartitionProvider {
     readonly count: number;
 
-    getLegendPartitions(): string[];
+    getPartitions(): IPartition[];
 
     placeItem(item: IItem): number | null;
 }
 
 export interface IBoard {
-    readonly horizontalPartitions: IPartition[];
-    readonly verticalPartitions: IPartition[];
+    readonly horizontalPartitionProviders: IPartitionProvider[];
+    readonly verticalPartitionProviders: IPartitionProvider[];
 
     readonly items: IItem[];
 
-    addHorizontalPartition(partition: IPartition): void;
-    addVerticalPartition(partition: IPartition): void;
+    addHorizontalPartition(partition: IPartitionProvider): void;
+    addVerticalPartition(partition: IPartitionProvider): void;
 }
 
-export class ItemValuePartition<T extends boolean | number | string | Date> implements IPartition {
+export class ItemValuePartition<T extends boolean | number | string | Date> implements IPartitionProvider {
     constructor(private fieldName: string, private itemValues: T[]) { }
 
-    getLegendPartitions(): string[] {
-        return this.itemValues.map(i => i.toString());
+    getPartitions(): IPartition[] {
+        return this.itemValues.map(i => ({
+            label: i.toString(),
+            value: i.toString()
+        }));
     }
 
     get count(): number {
@@ -56,16 +66,16 @@ export class ItemValuePartition<T extends boolean | number | string | Date> impl
 }
 
 export class Board implements IBoard {
-    readonly horizontalPartitions: IPartition[] = [];
-    readonly verticalPartitions: IPartition[] = [];
+    readonly horizontalPartitionProviders: IPartitionProvider[] = [];
+    readonly verticalPartitionProviders: IPartitionProvider[] = [];
 
     items: IItem[] = [];
 
-    addHorizontalPartition(partition: IPartition): void {
-        this.horizontalPartitions.push(partition);
+    addHorizontalPartition(partition: IPartitionProvider): void {
+        this.horizontalPartitionProviders.push(partition);
     }
 
-    addVerticalPartition(partition: IPartition): void {
-        this.verticalPartitions.push(partition);
+    addVerticalPartition(partition: IPartitionProvider): void {
+        this.verticalPartitionProviders.push(partition);
     }
 }
