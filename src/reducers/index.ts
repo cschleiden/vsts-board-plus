@@ -1,4 +1,4 @@
-import board, { IBoardState } from "./board";
+import board, { IBoardState } from "./board.reducer";
 import { combineReducers } from "redux";
 
 export interface IState {

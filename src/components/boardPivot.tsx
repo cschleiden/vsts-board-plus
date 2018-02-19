@@ -1,34 +1,38 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { IState } from "../reducers";
-import { IItem, Board, ItemValuePartition } from "../model/interfaces";
-import { BoardView, IPartitionDrop } from "./board";
+import { IItem, IItemPlacement, IDropLocation, IPartition } from "../model/interfaces";
+import { BoardView } from "./boardView";
 import { autobind } from "office-ui-fabric-react/lib/Utilities";
-import { boardDrop } from "../actions/board.actions";
+import { dropCard, initBoard } from "../actions/board.actionsCreator";
 
 interface IBoardPivotProps {
     items: IItem[];
 
-    onDrop(id: number, drop: IPartitionDrop): void;
+    horizontalPartitions: IPartition[][];
+    verticalPartitions: IPartition[][];
+
+    cells: IItemPlacement;
+
+    init(): void;
+    onDrop(id: number, drop: IDropLocation): void;
 }
 
-class BoardPivot extends React.Component<IBoardPivotProps> {
+class BoardPivot extends React.PureComponent<IBoardPivotProps> {
+    componentWillMount() {
+        const { init } = this.props;
+        init();
+    }
+
     render() {
-        const board = new Board();
-
-        board.addHorizontalPartition(new ItemValuePartition<string>("State", ["Active", "Resolved"]));
-        board.addHorizontalPartition(new ItemValuePartition<string>("IsBlocked", ["Not Blocked", "Blocked"]));
-        board.addHorizontalPartition(new ItemValuePartition<string>("Dummy", ["A", "B"]));
-
-        board.addVerticalPartition(new ItemValuePartition<string>("Parent", ["Feature 1", "Epic 2"]));
-        board.addVerticalPartition(new ItemValuePartition<string>("Assigned To", ["John", "Jane"]));
-
-        board.items = this.props.items;
+        const { horizontalPartitions, verticalPartitions, cells } = this.props;
 
         return (
             <div>
                 <BoardView
-                    board={board}
+                    horizontalPartitions={horizontalPartitions}
+                    verticalPartitions={verticalPartitions}
+                    cells={cells}
                     onCardMove={this.onCardMove}
                 />
             </div>
@@ -36,7 +40,7 @@ class BoardPivot extends React.Component<IBoardPivotProps> {
     }
 
     @autobind
-    private onCardMove(id: number, drop: IPartitionDrop) {
+    private onCardMove(id: number, drop: IDropLocation) {
         const { onDrop } = this.props;
 
         onDrop(id, drop);
@@ -45,13 +49,19 @@ class BoardPivot extends React.Component<IBoardPivotProps> {
 
 export default connect(
     (state: IState) => {
+        const { placedItems, items, horizontalPartitions, verticalPartitions } = state.board;
+
         return {
-            items: state.board.items
+            items,
+            horizontalPartitions,
+            verticalPartitions,
+            cells: placedItems
         };
     },
     (dispatch) => {
         return {
-            onDrop: (id: number, drop: IPartitionDrop) => { dispatch(boardDrop(id, drop)); }
+            init: () => { dispatch(initBoard("test-id")); },
+            onDrop: (id: number, drop: IDropLocation) => { dispatch(dropCard(id, drop)); }
         };
     }
 )(BoardPivot);

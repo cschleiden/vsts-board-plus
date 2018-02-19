@@ -1,7 +1,11 @@
+export interface IFieldValueMap {
+    [key: string]: boolean | number | string | Date;
+}
+
 export interface IItem {
     id: number;
 
-    values: { [key: string]: boolean | number | string | Date };
+    values: IFieldValueMap;
 }
 
 export interface IEntry {
@@ -13,69 +17,107 @@ export interface IPartition {
 
     // TODO
     value: string;
+
+    fieldName: string;
+}
+
+export interface IItemPlacement {
+    [x: number]: { [y: number]: IItem[] };
 }
 
 export interface IPartitionProvider {
-    readonly count: number;
+    readonly type: string;
 
-    getPartitions(): IPartition[];
-
-    placeItem(item: IItem): number | null;
+    getPartitions(configuration: IPartitionProviderConfiguration, items: IItem[]): Promise<IPartition[]>;
 }
 
-export interface IBoard {
-    readonly horizontalPartitionProviders: IPartitionProvider[];
-    readonly verticalPartitionProviders: IPartitionProvider[];
-
-    readonly items: IItem[];
-
-    addHorizontalPartition(partition: IPartitionProvider): void;
-    addVerticalPartition(partition: IPartitionProvider): void;
+export interface IPartitionProviderInputs {
+    // tslint:disable-next-line:no-any
+    [key: string]: any;
 }
 
-export class ItemValuePartition<T extends boolean | number | string | Date> implements IPartitionProvider {
-    constructor(private fieldName: string, private itemValues: T[]) { }
+export interface IPartitionProviderConfiguration {
+    type: string;
 
-    getPartitions(): IPartition[] {
-        return this.itemValues.map(i => ({
-            label: i.toString(),
-            value: i.toString()
-        }));
-    }
+    displayName: string;
 
-    get count(): number {
-        return this.itemValues.length;
-    }
+    fieldName: string;
 
-    placeItem(item: IItem): number | null {
-        const value = item.values[this.fieldName];
-        if (!value) {
-            // Cannot place in this partition
-            return null;
-        }
+    inputs?: IPartitionProviderInputs;
 
-        for (let i = 0; i < this.itemValues.length; ++i) {
-            const itemValue = this.itemValues[i];
-            if (itemValue === value) {
-                return i;
-            }
-        }
-
-        return null;
-    }
+    // tslint:disable-next-line:no-any
+    // data: any;
 }
 
-export class Board implements IBoard {
-    readonly horizontalPartitionProviders: IPartitionProvider[] = [];
-    readonly verticalPartitionProviders: IPartitionProvider[] = [];
+export interface IBoardConfiguration {
+    id: string;
+    name: string;
 
-    items: IItem[] = [];
+    horizontalPartitionProviders: IPartitionProviderConfiguration[];
+    verticalPartitionProviders: IPartitionProviderConfiguration[];
+}
 
-    addHorizontalPartition(partition: IPartitionProvider): void {
-        this.horizontalPartitionProviders.push(partition);
-    }
+// export interface IBoard {
+//     readonly horizontalPartitionProviders: IPartitionProvider[];
+//     readonly verticalPartitionProviders: IPartitionProvider[];
 
-    addVerticalPartition(partition: IPartitionProvider): void {
-        this.verticalPartitionProviders.push(partition);
-    }
+//     readonly items: IItem[];
+
+//     addHorizontalPartition(partition: IPartitionProvider): void;
+//     addVerticalPartition(partition: IPartitionProvider): void;
+// }
+
+// // TODO: Move
+// export class ItemValuePartition<T extends boolean | number | string | Date> implements IPartitionProvider {
+//     public readonly type = "static";
+
+//     constructor(private fieldName: string, private itemValues: T[]) { }
+
+//     getPartitions(): IPartition[] {
+//         return this.itemValues.map(i => ({
+//             label: i.toString(),
+//             value: i.toString()
+//         }));
+//     }
+
+//     get count(): number {
+//         return this.itemValues.length;
+//     }
+
+//     placeItem(item: IItem): number | null {
+//         const value = item.values[this.fieldName];
+//         if (!value) {
+//             // Cannot place in this partition
+//             return null;
+//         }
+
+//         for (let i = 0; i < this.itemValues.length; ++i) {
+//             const itemValue = this.itemValues[i];
+//             if (itemValue === value) {
+//                 return i;
+//             }
+//         }
+
+//         return null;
+//     }
+// }
+
+// export class Board implements IBoard {
+//     readonly horizontalPartitionProviders: IPartitionProvider[] = [];
+//     readonly verticalPartitionProviders: IPartitionProvider[] = [];
+
+//     items: IItem[] = [];
+
+//     addHorizontalPartition(partition: IPartitionProvider): void {
+//         this.horizontalPartitionProviders.push(partition);
+//     }
+
+//     addVerticalPartition(partition: IPartitionProvider): void {
+//         this.verticalPartitionProviders.push(partition);
+//     }
+// }
+
+// TODO...
+export interface IDropLocation {
+    partitions: IPartition[];
 }

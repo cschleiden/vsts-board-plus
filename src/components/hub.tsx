@@ -33,7 +33,7 @@ export class HubComponent extends React.Component<IHubComponentProps> {
                                 important: true,
                                 disabled: false,
                                 iconProps: {
-                                    iconName: "Add"
+                                    iconName: "Refresh"
                                 },
                                 onClick: () => alert("refresh")
                             },
@@ -43,7 +43,7 @@ export class HubComponent extends React.Component<IHubComponentProps> {
                                 important: true,
                                 disabled: false,
                                 iconProps: {
-                                    iconName: "Add"
+                                    iconName: "Settings"
                                 },
                                 onClick: () => alert("configure")
                             }

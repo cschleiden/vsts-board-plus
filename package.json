@@ -4,12 +4,14 @@
   "private": true,
   "dependencies": {
     "@types/react-beautiful-dnd": "^3.0.1",
+    "@types/redux-thunk": "^2.1.0",
     "immuts": "^2.0.1",
     "react": "^16.2.0",
     "react-beautiful-dnd": "^4.0.1",
     "react-dom": "^16.2.0",
     "react-scripts-ts": "2.13.0",
     "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0",
     "vss-ui": "^3.127.3",
     "vss-web-extension-sdk": "^5.127.0"
   },
