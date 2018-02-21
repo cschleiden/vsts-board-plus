@@ -1,10 +1,10 @@
-import { IPartitionProvider, IPartitionProviderConfiguration, IPartition, IItem } from "../interfaces";
+import { IPartitionProvider, IPartitionProviderConfiguration, IPartition, IItem, PartitionProviderType } from "../interfaces";
 
 /**
  * Partition provider that creates one partition for every unique field value
  */
 const FieldValuePartitionProvider: IPartitionProvider = {
-    type: "fieldValue",
+    type: PartitionProviderType.FieldValue,
 
     getPartitions(configuration: IPartitionProviderConfiguration, items: IItem[]): Promise<IPartition[]> {
         const set = new Set(items.map(item => item.values[configuration.fieldName]));
@@ -13,7 +13,8 @@ const FieldValuePartitionProvider: IPartitionProvider = {
             Array.from(set).map(value => ({
                 label: value.toString(),
                 value: value.toString(),
-                fieldName: configuration.fieldName
+                fieldName: configuration.fieldName,
+                legendType: configuration.legendType
             }))
         );
     }

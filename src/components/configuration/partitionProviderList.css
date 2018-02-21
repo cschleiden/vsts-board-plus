@@ -1,0 +1,21 @@
+.partition-provider-list {
+    counter-reset: partitionList;
+}
+
+.partition-provider-list--add {
+    opacity: 0.5;
+    transition: opacity 0.3s;
+}
+
+.partition-provider-list--add:hover {
+    opacity: 1.0;
+}
+
+.provider-list-add--item { }
+
+.provider-list-add--item-name {
+    font-weight: bold;
+}
+
+.provider-list-add--item-description {
+}

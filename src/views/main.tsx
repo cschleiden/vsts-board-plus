@@ -1,23 +1,24 @@
 import * as React from "react";
-
 import { Hub } from "vss-ui/Hub";
 import { HubHeader } from "vss-ui/HubHeader";
 import { HubViewState } from "vss-ui/Utilities/HubViewState";
 import { PivotBarItem } from "vss-ui/PivotBar";
-// import { IPivotBarAction } from "vss-ui/Components/PivotBar";
+import { autobind } from "@uifabric/utilities";
+import { connect } from "react-redux";
+import { configureBoard } from "../actions/nav.actionsCreators";
+import BoardPivot from "../components/boardPivot";
+import ConfigurationPanel from "./configurationPanel";
 
-export interface IHubComponentProps {
-
+interface IMainProps {
+    configure(): void;
 }
 
-export class HubComponent extends React.Component<IHubComponentProps> {
+class Main extends React.Component<IMainProps> {
     private hubViewState = new HubViewState();
 
     public render(): JSX.Element {
-        const { children } = this.props;
-
         return (
-            <Hub className="manage-hub" hubViewState={this.hubViewState} hideFullScreenToggle={true}>
+            <Hub className="manage-hub" hubViewState={this.hubViewState} hideFullScreenToggle={false}>
                 <HubHeader
                     title={"Board+"}
                 />
@@ -45,13 +46,28 @@ export class HubComponent extends React.Component<IHubComponentProps> {
                                 iconProps: {
                                     iconName: "Settings"
                                 },
-                                onClick: () => alert("configure")
+                                onClick: this._configure
                             }
                         ]}
                 >
-                    {children}
+
+                    <BoardPivot />
+
+                    <ConfigurationPanel />
                 </PivotBarItem>
             </Hub >
         );
     }
+
+    @autobind
+    private _configure() {
+        const { configure } = this.props;
+        if (configure) {
+            configure();
+        }
+    }
 }
+
+export default connect(null, (dispatch) => ({
+    configure: () => { dispatch(configureBoard("test")); }
+}))(Main);

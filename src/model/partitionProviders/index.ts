@@ -1,13 +1,13 @@
-import { IPartitionProvider } from "../interfaces";
+import { IPartitionProvider, PartitionProviderType } from "../interfaces";
 import StaticPartitionProvider from "./static";
 import FieldValuePartitionProvider from "./fieldValue";
 
-export default function getPartitionProvder(type: string): IPartitionProvider {
+export default function getPartitionProvder(type: PartitionProviderType): IPartitionProvider {
     switch (type) {
-        case StaticPartitionProvider.type:
+        case PartitionProviderType.Static:
             return StaticPartitionProvider;
 
-        case FieldValuePartitionProvider.type:
+        case PartitionProviderType.FieldValue:
             return FieldValuePartitionProvider;
 
         default:

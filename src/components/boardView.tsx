@@ -6,6 +6,7 @@ import { css } from "../utils/css";
 import { DragDropContext, Droppable, DroppableProvided, DroppableStateSnapshot, Draggable, DropResult } from "react-beautiful-dnd";
 import { iteratePartitions } from "../model/board";
 import { Card } from "./card";
+import { Legend } from "./legend";
 
 export interface IBoardProps {
     horizontalPartitions: IPartition[][];
@@ -34,7 +35,7 @@ export class BoardView extends React.PureComponent<IBoardProps> {
                 <div
                     className="board"
                     style={{
-                        gridTemplateColumns: `repeat(${numLegendColumns}, 24px) repeat(${numContentColumns}, 1fr)`,
+                        gridTemplateColumns: `repeat(${numLegendColumns}, minmax(24px, auto)) repeat(${numContentColumns}, 1fr)`,
                         gridTemplateRows: `repeat(${numLegendRows}, 24px) repeat(${numContentRows}, minmax(100px, auto))`
                     }}
                 >
@@ -94,9 +95,7 @@ export class BoardView extends React.PureComponent<IBoardProps> {
                                     gridRow: transpose ? first : second
                                 }}
                             >
-                                <div className="text">
-                                    {partition.label}
-                                </div>
+                                <Legend type={partition.legendType} label={partition.label} vertical={transpose} />
                             </div>
                         );
                     })

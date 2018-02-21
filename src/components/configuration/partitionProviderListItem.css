@@ -1,0 +1,30 @@
+.partition-provider-list-item {
+    background: aliceblue;
+
+    padding: 5px;
+    margin-bottom: 5px;
+}
+
+.partition-provider-list-item-wrapper {
+    display: flex;    
+    line-height: 32px;
+}
+
+.partition-provider-list-item--index:before {
+    flex: 0 0 auto;
+    
+    counter-increment: partitionList;
+    content: counter(partitionList);
+
+    margin-right: 10px;
+}
+
+.partition-provider-list-item--name {
+    flex: 1 1 auto;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.partition-provider-list-item--actions {
+    flex: 0 0 auto;    
+}

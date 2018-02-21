@@ -1,0 +1,26 @@
+.group-input {
+    background: #EEE;
+}
+
+.group-input--header {
+    display: flex;    
+
+    line-height: 32px;
+}
+
+.group-input--label {
+    flex: 1 1 auto;
+
+    padding: 0px 5px;
+    font-weight: bold;
+}
+
+.group-input--actions {
+    flex: 0 0 auto;
+
+    text-align: right;
+}
+
+.group-input--inputs {
+    padding: 5px;
+}

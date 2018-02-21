@@ -1,0 +1,9 @@
+.legend-default {
+}
+
+.legend-default--vertical {
+    transform: rotateZ(-90deg);
+    position: absolute;
+    width: auto;
+    white-space: nowrap;
+}

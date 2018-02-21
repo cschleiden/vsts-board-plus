@@ -1,3 +1,7 @@
+import { TemplateInputTypes } from "./configuration/inputs";
+
+export type Direction = "horizontal" | "vertical";
+
 export interface IFieldValueMap {
     [key: string]: boolean | number | string | Date;
 }
@@ -13,7 +17,15 @@ export interface IEntry {
 }
 
 export interface IPartition {
+    /** 
+     * Label to display for legend
+     */
     label: string;
+
+    /** 
+     * How to render the legend
+     */
+    legendType: PartitionProviderLegendType;
 
     // TODO
     value: string;
@@ -26,7 +38,7 @@ export interface IItemPlacement {
 }
 
 export interface IPartitionProvider {
-    readonly type: string;
+    readonly type: PartitionProviderType;
 
     getPartitions(configuration: IPartitionProviderConfiguration, items: IItem[]): Promise<IPartition[]>;
 }
@@ -36,14 +48,59 @@ export interface IPartitionProviderInputs {
     [key: string]: any;
 }
 
+export interface IPartitionProviderTemplate {
+    /** Unique identifier */
+    id: string;
+
+    displayName: string;
+
+    description: string;
+
+    inputs: IPartitionProviderTemplateInput[];
+
+    type: PartitionProviderType;
+
+    legendType: PartitionProviderLegendType;
+}
+
+export interface IPartitionProviderTemplateInput {
+    type: TemplateInputTypes;
+
+    label?: string;
+
+    inputs?: Object;
+
+    group?: IPartitionProviderTemplateInput[];
+
+    /** If true, allows multiple inputs of the type */
+    multiple?: boolean;
+}
+
+export enum PartitionProviderType {
+    FieldValue,
+    Static,
+    Parent,
+
+    Iterations,
+    Team,
+    TeamMembers
+}
+
+export enum PartitionProviderLegendType {
+    Text,
+    Card
+}
+
 export interface IPartitionProviderConfiguration {
-    type: string;
+    type: PartitionProviderType;
 
     displayName: string;
 
     fieldName: string;
 
     inputs?: IPartitionProviderInputs;
+
+    legendType?: PartitionProviderLegendType;
 
     // tslint:disable-next-line:no-any
     // data: any;
@@ -120,4 +177,10 @@ export interface IBoardConfiguration {
 // TODO...
 export interface IDropLocation {
     partitions: IPartition[];
+}
+
+export interface IFieldReference {
+    referenceName: string;
+
+    displayName: string;
 }

@@ -1,15 +1,16 @@
-import { IPartitionProvider, IPartition, IPartitionProviderConfiguration, IItem } from "../interfaces";
+import { IPartitionProvider, IPartition, IPartitionProviderConfiguration, IItem, PartitionProviderType } from "../interfaces";
 
 const Provider: IPartitionProvider = {
-    type: "static",
-
+    type: PartitionProviderType.Static,
+    
     getPartitions(configuration: IPartitionProviderConfiguration, items: IItem[]): Promise<IPartition[]> {
         const values: string[] = configuration.inputs["values"];
 
         return Promise.resolve(values.map(value => ({
             label: value.toString(),
             value,
-            fieldName: configuration.fieldName
+            fieldName: configuration.fieldName,
+            legendType: configuration.legendType
         })));
     }
 };

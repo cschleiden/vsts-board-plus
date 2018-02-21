@@ -1,0 +1,34 @@
+.card {
+    border: solid 1px #c8c8c8;
+    border-left: 3px solid rgb(255, 123, 0);    
+    flex-grow: 1 1 0;
+
+    min-width: 100px;
+    min-height: 60px;
+    margin: 5px;
+
+    background: white;
+}
+
+.card:hover {
+    background: #eee;
+}
+
+.card--header {
+    display: flex;
+    flex-direction: row;
+
+    margin: 5px;
+}
+
+.card--id {
+    font-weight: bold;
+
+    margin-right: 5px;
+}
+
+.card--title {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
