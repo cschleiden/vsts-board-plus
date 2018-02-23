@@ -1,18 +1,18 @@
 import { asyncActionCreator } from "./actions";
 import * as Actions from "./configuration.actions";
-import { IPartitionProviderTemplate } from "../model/interfaces";
+import { PartitionProviderType } from "../model/interfaces";
 
-export const addTemplate = (direction: "horizontal" | "vertical", template: IPartitionProviderTemplate) => asyncActionCreator(async (dispatch) => {
-    return dispatch(Actions.addTemplate({
+export const addTemplate = (direction: "horizontal" | "vertical", type: PartitionProviderType) => asyncActionCreator(async (dispatch) => {
+    return dispatch(Actions.addPartition({
         direction,
-        template
+        type
     }));
 });
 
-export const removeTemplate = (direction: "horizontal" | "vertical", template: IPartitionProviderTemplate) => asyncActionCreator(async (dispatch) => {
-    return dispatch(Actions.removeTemplate({
+export const removeTemplate = (direction: "horizontal" | "vertical", index: number) => asyncActionCreator(async (dispatch) => {
+    return dispatch(Actions.removePartition({
         direction,
-        template
+        index
     }));
 });
 

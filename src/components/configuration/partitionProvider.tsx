@@ -1,19 +1,22 @@
 import "./partitionProviderListItem.css";
 import * as React from "react";
-import { IPartitionProviderTemplate } from "../../model/interfaces";
+import { IPartitionProviderConfiguration } from "../../model/interfaces";
 import { IconButton } from "office-ui-fabric-react/lib/Button";
 import { InputComponent } from "./inputs";
 import { autobind } from "@uifabric/utilities";
+import { getTemplateByType } from "../../data/partitionProviderTemplates";
 
 export interface IPartitionProviderListItemProps {
-    template: IPartitionProviderTemplate;
-
-    onRemove?(template: IPartitionProviderTemplate): void;
+    config: IPartitionProviderConfiguration;
+    index: number;
+    onRemove?(index: number): void;
 }
 
 export class PartitionProviderListItem extends React.Component<IPartitionProviderListItemProps> {
     public render(): JSX.Element {
-        const { template } = this.props;
+        const { config } = this.props;
+        const { type } = config;
+        const template = getTemplateByType(type);
 
         return (
             <div className="partition-provider-list-item">
@@ -39,7 +42,8 @@ export class PartitionProviderListItem extends React.Component<IPartitionProvide
                         <InputComponent
                             key={index}
                             input={input}
-                        />))}
+                        />
+                    ))}
                 </div>
             </div>
         );
@@ -47,9 +51,9 @@ export class PartitionProviderListItem extends React.Component<IPartitionProvide
 
     @autobind
     private onRemove() {
-        const { template, onRemove } = this.props;
+        const { index, onRemove } = this.props;
         if (onRemove) {
-            onRemove(template);
+            onRemove(index);
         }
     }
 }

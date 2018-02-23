@@ -1,16 +1,64 @@
-import { IPartitionProvider, IPartition, IPartitionProviderConfiguration, IItem, PartitionProviderType } from "../interfaces";
+import {
+    IPartitionProvider,
+    IPartition,
+    IPartitionProviderConfiguration,
+    IItem,
+    PartitionProviderType,
+    IFieldReference,
+    PartitionProviderLegendType
+} from "../interfaces";
+
+export interface IStaticPartitionProviderInputs {
+    partitions: {
+        name: string;
+        field: IFieldReference;
+        values: string[];
+    }[];
+}
 
 const Provider: IPartitionProvider = {
     type: PartitionProviderType.Static,
-    
-    getPartitions(configuration: IPartitionProviderConfiguration, items: IItem[]): Promise<IPartition[]> {
-        const values: string[] = configuration.inputs["values"];
 
-        return Promise.resolve(values.map(value => ({
-            label: value.toString(),
-            value,
-            fieldName: configuration.fieldName,
-            legendType: configuration.legendType
+    getRequiredFields(configuration: IPartitionProviderConfiguration): string[] {
+        const fieldReference: IFieldReference = configuration.inputs["field"];
+
+        return [fieldReference.referenceName];
+    },
+
+    getPartitions(configuration: IPartitionProviderConfiguration, items: IItem[]): Promise<IPartition[]> {
+        /*
+        Inputs are defined in the following structure:
+        "partitions": [
+            {
+                "name": "Active",
+                "field": {
+                    displayName: "State",
+                    referenceName: "System.State"
+                } as IFieldReference,
+                "values": [
+                    "Active"
+                ]
+            },
+            {
+                "name": "Resolved",
+                "field": {
+                    displayName: "State",
+                    referenceName: "System.State"
+                } as IFieldReference,
+                "values": [
+                    "Resolved", "Completed"
+                ]
+            }
+        ]
+        */
+
+        const inputs = configuration.inputs as IStaticPartitionProviderInputs;
+
+        return Promise.resolve(inputs.partitions.map(partition => ({
+            label: partition.name,
+            value: partition.values[0],
+            fieldName: partition.field.referenceName,
+            legendType: PartitionProviderLegendType.Text
         })));
     }
 };

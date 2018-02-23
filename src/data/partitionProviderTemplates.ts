@@ -8,7 +8,7 @@ const templates: IPartitionProviderTemplate[] = [
         description: "Generates a partition for every unique field value of the work items on the board for a given field.",
         inputs: [
             {
-                type: TemplateInputTypes.FieldReferenceName
+                type: TemplateInputTypes.Field
             }
         ],
         legendType: PartitionProviderLegendType.Text,
@@ -28,7 +28,7 @@ const templates: IPartitionProviderTemplate[] = [
                         label: "Partition Name"
                     },
                     {
-                        type: TemplateInputTypes.FieldReferenceName
+                        type: TemplateInputTypes.Field
                     },
                     {
                         type: TemplateInputTypes.Group,
@@ -74,13 +74,23 @@ const templates: IPartitionProviderTemplate[] = [
         description: "Generates partitions for all of the iterations the given teams have subscribed to, sorted by their start dates.",
         inputs: [
             {
-                type: TemplateInputTypes.Team,
-                multiple: true
+                type: TemplateInputTypes.Group,
+                label: "Teams",
+                group: [
+                    {
+                        type: TemplateInputTypes.Team
+                    }
+                ]
             }
         ],
         legendType: PartitionProviderLegendType.Text,
         type: PartitionProviderType.Iterations
     },
 ];
+
+export function getTemplateByType(type: PartitionProviderType): IPartitionProviderTemplate {
+    const result = templates.filter(t => t.type === type);
+    return result.length > 0 && result[0] || null;
+}
 
 export default templates;

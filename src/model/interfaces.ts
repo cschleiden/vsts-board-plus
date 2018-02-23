@@ -40,6 +40,8 @@ export interface IItemPlacement {
 export interface IPartitionProvider {
     readonly type: PartitionProviderType;
 
+    getRequiredFields(configuration: IPartitionProviderConfiguration): string[];
+
     getPartitions(configuration: IPartitionProviderConfiguration, items: IItem[]): Promise<IPartition[]>;
 }
 
@@ -94,21 +96,14 @@ export enum PartitionProviderLegendType {
 export interface IPartitionProviderConfiguration {
     type: PartitionProviderType;
 
-    displayName: string;
-
-    fieldName: string;
-
     inputs?: IPartitionProviderInputs;
-
-    legendType?: PartitionProviderLegendType;
-
-    // tslint:disable-next-line:no-any
-    // data: any;
 }
 
 export interface IBoardConfiguration {
     id: string;
     name: string;
+
+    queryId: string;
 
     horizontalPartitionProviders: IPartitionProviderConfiguration[];
     verticalPartitionProviders: IPartitionProviderConfiguration[];

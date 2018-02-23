@@ -8,7 +8,7 @@ import { autobind } from "@uifabric/utilities";
 import { PrimaryButton, DefaultButton } from "office-ui-fabric-react/lib/Button";
 import { cancelBoardConfiguration } from "../actions/nav.actionsCreators";
 import { TextField } from "office-ui-fabric-react/lib/TextField";
-import { IPartitionProviderTemplate, Direction } from "../model/interfaces";
+import { Direction, PartitionProviderType, IPartitionProviderConfiguration } from "../model/interfaces";
 import { addTemplate, removeTemplate, updateName, updateQuery } from "../actions/configuration.actionsCreators";
 
 interface IConfigurationPanelProps {
@@ -16,12 +16,12 @@ interface IConfigurationPanelProps {
 
     name: string;
     queryId: string;
-    horizontalPartitions: IPartitionProviderTemplate[];
-    verticalPartitions: IPartitionProviderTemplate[];
+    horizontalPartitionProviders: IPartitionProviderConfiguration[];
+    verticalPartitionProviders: IPartitionProviderConfiguration[];
 
     close(): void;
-    add(direction: Direction, template: IPartitionProviderTemplate): void;
-    remove(direction: Direction, template: IPartitionProviderTemplate): void;
+    add(direction: Direction, type: PartitionProviderType): void;
+    remove(direction: Direction, index: number): void;
 
     onNameChanged(name: string): void;
     onQueryChanged(queryId: string): void;
@@ -35,8 +35,8 @@ class ConfigurationPanel extends React.Component<IConfigurationPanelProps> {
             remove,
             name,
             queryId,
-            horizontalPartitions,
-            verticalPartitions,
+            horizontalPartitionProviders,
+            verticalPartitionProviders,
             onNameChanged,
             onQueryChanged
         } = this.props;
@@ -56,14 +56,14 @@ class ConfigurationPanel extends React.Component<IConfigurationPanelProps> {
 
                 <h4>Horizontal</h4>
                 <PartitionProviderList
-                    partitionProviderTemplates={horizontalPartitions}
+                    partitionProviders={horizontalPartitionProviders}
                     onAdd={add.bind(this, "horizontal")}
                     onRemove={remove.bind(this, "horizontal")}
                 />
 
                 <h4>Vertical</h4>
                 <PartitionProviderList
-                    partitionProviderTemplates={verticalPartitions}
+                    partitionProviders={verticalPartitionProviders}
                     onAdd={add.bind(this, "vertical")}
                     onRemove={remove.bind(this, "vertical")}
                 />
@@ -90,21 +90,21 @@ class ConfigurationPanel extends React.Component<IConfigurationPanelProps> {
 
 export default connect(
     (state: IState) => {
-        const { name, queryId, horizontalPartitions, verticalPartitions } = state.configuration;
+        const { name, queryId, horizontalPartitionProviders, verticalPartitionProviders } = state.configuration;
 
         return {
             showPanel: state.nav.configurationOpen,
             name,
             queryId,
-            horizontalPartitions,
-            verticalPartitions
+            horizontalPartitionProviders,
+            verticalPartitionProviders
         };
     },
     (dispatch) => ({
         close: () => { dispatch(cancelBoardConfiguration("test")); },
 
-        add: (direction: Direction, template: IPartitionProviderTemplate) => { dispatch(addTemplate(direction, template)); },
-        remove: (direction: Direction, template: IPartitionProviderTemplate) => { dispatch(removeTemplate(direction, template)); },
+        add: (direction: Direction, type: PartitionProviderType) => { dispatch(addTemplate(direction, type)); },
+        remove: (direction: Direction, index: number) => { dispatch(removeTemplate(direction, index)); },
 
         onNameChanged: (name: string) => { dispatch(updateName(name)); },
         onQueryChanged: (queryId: string) => { dispatch(updateQuery(queryId)); }

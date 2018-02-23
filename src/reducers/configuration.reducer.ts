@@ -1,34 +1,38 @@
 import { makeImmutable } from "immuts";
 import { reducerMap } from "./reducers";
 import * as Actions from "../actions/configuration.actions";
-import { IPartitionProviderTemplate } from "../model/interfaces";
+import { IPartitionProviderConfiguration, IBoardConfiguration } from "../model/interfaces";
 
 const initialState = makeImmutable({
-    name: "",
-    queryId: "",
-    horizontalPartitions: [] as IPartitionProviderTemplate[],
-    verticalPartitions: [] as IPartitionProviderTemplate[]
-});
+} as IBoardConfiguration);
 
 export type IConfigurationState = typeof initialState;
 
-function addTemplate(state: IConfigurationState, payload: typeof Actions.addTemplate.payload): IConfigurationState {
-    const { direction, template } = payload;
+function setConfig(state: IConfigurationState, config: typeof Actions.setConfig.payload): IConfigurationState {
+    return state.__set(config);
+}
+
+function addTemplate(state: IConfigurationState, payload: typeof Actions.addPartition.payload): IConfigurationState {
+    const { direction, type } = payload;
+
+    const newPartition: IPartitionProviderConfiguration = {
+        type
+    };
 
     if (direction === "horizontal") {
-        return state.__set(x => x.horizontalPartitions, partitions => partitions.concat(template));
+        return state.__set(x => x.horizontalPartitionProviders, partitions => partitions.concat(newPartition));
     } else {
-        return state.__set(x => x.verticalPartitions, partitions => partitions.concat(template));
+        return state.__set(x => x.verticalPartitionProviders, partitions => partitions.concat(newPartition));
     }
 }
 
-function removeTemplate(state: IConfigurationState, payload: typeof Actions.addTemplate.payload): IConfigurationState {
-    const { direction, template } = payload;
+function removeTemplate(state: IConfigurationState, payload: typeof Actions.removePartition.payload): IConfigurationState {
+    const { direction, index } = payload;
 
     if (direction === "horizontal") {
-        return state.__set(x => x.horizontalPartitions, partitions => partitions.filter(p => p !== template));
+        return state.__set(x => x.horizontalPartitionProviders, partitions => partitions.filter((_, i) => i !== index));
     } else {
-        return state.__set(x => x.verticalPartitions, partitions => partitions.filter(p => p !== template));
+        return state.__set(x => x.verticalPartitionProviders, partitions => partitions.filter((_, i) => i !== index));
     }
 }
 
@@ -43,8 +47,9 @@ function setQuery(state: IConfigurationState, queryId: typeof Actions.setQuery.p
 export default reducerMap(
     initialState,
     [
-        [Actions.addTemplate, addTemplate],
-        [Actions.removeTemplate, removeTemplate],
+        [Actions.setConfig, setConfig],
+        [Actions.addPartition, addTemplate],
+        [Actions.removePartition, removeTemplate],
         [Actions.setName, setName],
         [Actions.setQuery, setQuery]
     ]

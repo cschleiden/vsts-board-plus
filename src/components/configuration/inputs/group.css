@@ -6,6 +6,8 @@
     display: flex;    
 
     line-height: 32px;
+
+    border-bottom: 2px aliceblue;
 }
 
 .group-input--label {

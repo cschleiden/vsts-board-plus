@@ -1,15 +1,17 @@
 import { makeAction } from "./actions";
-import { IPartitionProviderTemplate } from "../model/interfaces";
+import { PartitionProviderType, IBoardConfiguration } from "../model/interfaces";
 
-export const addTemplate = makeAction<{
-    direction: "horizontal" | "vertical";
-    template: IPartitionProviderTemplate;
-}>("config-add-template");
+export const setConfig = makeAction<IBoardConfiguration>("config-set");
 
-export const removeTemplate = makeAction<{
+export const addPartition = makeAction<{
     direction: "horizontal" | "vertical";
-    template: IPartitionProviderTemplate;
-}>("config-remove-template");
+    type: PartitionProviderType;
+}>("config-add-partition");
+
+export const removePartition = makeAction<{
+    direction: "horizontal" | "vertical";
+    index: number;
+}>("config-remove-partition");
 
 export const setName = makeAction<string>("config-set-name");
 

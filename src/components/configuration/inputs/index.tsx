@@ -5,6 +5,7 @@ import { IPartitionProviderTemplateInput } from "../../../model/interfaces";
 import { GroupInput } from "./group";
 import { TextInput } from "./textInput";
 import { autobind } from "@uifabric/utilities";
+import { TeamSelector } from "./teamSelector";
 
 export interface InputComponentProps {
     input: IPartitionProviderTemplateInput;
@@ -14,8 +15,11 @@ export class InputComponent extends React.PureComponent<InputComponentProps> {
     render(): JSX.Element {
         const { input } = this.props;
         switch (input.type) {
-            case TemplateInputTypes.FieldReferenceName:
+            case TemplateInputTypes.Field:
                 return <FieldSelector input={input} onChanged={this.onInputChanged} />;
+
+            case TemplateInputTypes.Team:
+                return <TeamSelector input={input} onChanged={this.onInputChanged} />;
 
             case TemplateInputTypes.Group:
                 return <GroupInput input={input} onRenderInput={this.renderInput} />;

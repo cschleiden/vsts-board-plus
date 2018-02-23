@@ -1,7 +1,7 @@
 import "./partitionProviderList.css";
 import * as React from "react";
 import { Dropdown } from "office-ui-fabric-react/lib/Dropdown";
-import { IPartitionProviderTemplate } from "../../model/interfaces";
+import { IPartitionProviderTemplate, IPartitionProviderConfiguration } from "../../model/interfaces";
 import { PartitionProviderListItem } from "./partitionProvider";
 import templates from "../../data/partitionProviderTemplates";
 import { autobind } from "@uifabric/utilities";
@@ -11,21 +11,21 @@ interface IListTemplate extends IPartitionProviderTemplate, ISelectableOption {
 }
 
 export interface IPartitionProviderListProps {
-    partitionProviderTemplates: IPartitionProviderTemplate[];
+    partitionProviders: IPartitionProviderConfiguration[];
 
     onAdd(template: IPartitionProviderTemplate): void;
-    onRemove(template: IPartitionProviderTemplate): void;
+    onRemove(index: number): void;
 }
 
 export class PartitionProviderList extends React.Component<IPartitionProviderListProps> {
     public render(): JSX.Element {
-        const { partitionProviderTemplates, onRemove } = this.props;
+        const { partitionProviders, onRemove } = this.props;
 
         return (
             <div className="partition-provider-list">
-                {partitionProviderTemplates.map(
-                    (template, index) => (
-                        <PartitionProviderListItem key={index} template={template} onRemove={onRemove} />
+                {partitionProviders.map(
+                    (config, index) => (
+                        <PartitionProviderListItem key={index} index={index} config={config} onRemove={onRemove} />
                     ))}
 
                 <div className="partition-provider-list--add">

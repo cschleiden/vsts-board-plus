@@ -1,38 +1,63 @@
-import { IBoardConfiguration, IItem, PartitionProviderType, PartitionProviderLegendType } from "./interfaces";
+import { IBoardConfiguration, IItem, PartitionProviderType, IFieldReference } from "./interfaces";
 import { FieldReferenceNames } from "./constants";
 
 export class BoardService {
     getBoardConfigurationById(id: string): Promise<IBoardConfiguration> {
         const config: IBoardConfiguration = {
             id,
+            queryId: "someQueryId",
             name: "My Board",
 
             verticalPartitionProviders: [
+                // {
+                //     type: PartitionProviderType.Parent
+                // },
                 {
                     type: PartitionProviderType.FieldValue,
-                    fieldName: "Parent",
-                    displayName: "State",
-                    legendType: PartitionProviderLegendType.Card
-                },
-                {
-                    type: PartitionProviderType.FieldValue,
-                    fieldName: "IsBlocked",
-                    displayName: "Blocked"
+                    inputs: {
+                        "field": {
+                            displayName: "IsBlocked",
+                            referenceName: "IsBlocked"
+                        } as IFieldReference
+                    }
                 }
             ],
 
             horizontalPartitionProviders: [
                 {
                     type: PartitionProviderType.FieldValue,
-                    fieldName: "Assigned To",
-                    displayName: "Assigned To"
+                    inputs: {
+                        "field": {
+                            displayName: "Assigned To",
+                            referenceName: "Assigned To"
+                        } as IFieldReference
+                    }
                 },
                 {
                     type: PartitionProviderType.Static,
-                    fieldName: "State",
-                    displayName: "State",
                     inputs: {
-                        "values": ["Active", "Resolved", "Closed"]
+                        "partitions": [
+                            {
+                                "name": "Active",
+                                "field": {
+                                    displayName: "State",
+                                    referenceName: "System.State"
+                                } as IFieldReference,
+                                "values": [
+                                    "Active"
+                                ]
+                            },
+                            {
+                                "name": "Resolved",
+                                "field": {
+                                    displayName: "State",
+                                    referenceName: "System.State"
+                                } as IFieldReference,
+                                "values": [
+                                    "Resolved", "Completed"
+                                ]
+                            }
+                        ]
                     }
                 },
             ]

@@ -1,6 +1,6 @@
 export const enum TemplateInputTypes {
     /** Reference name of a field in the collection */
-    FieldReferenceName,
+    Field,
 
     /** Id of a team in the project */
     Team,
