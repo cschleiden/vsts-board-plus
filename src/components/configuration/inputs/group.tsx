@@ -13,6 +13,9 @@ export interface GroupInputProps {
     // tslint:disable-next-line:no-any
     onRenderInput(key: string, input: IPartitionProviderTemplateInput, value: any, onChanged: (value: any) => void): JSX.Element;
 
+    // onAdd(): void;
+    // onRemove(index: number): void;
+
     // tslint:disable-next-line:no-any
     onChanged(value: any): void;
 }
@@ -20,12 +23,6 @@ export interface GroupInputProps {
 export class GroupInput extends React.PureComponent<GroupInputProps> {
     render(): JSX.Element {
         const { input, onRenderInput, value } = this.props;
-
-        // let { value = [] } = this.props;
-
-        // if (!Array.isArray(value)) {
-        //     value = [value];
-        // }
 
         return (
             <div className="group-input">
@@ -47,7 +44,7 @@ export class GroupInput extends React.PureComponent<GroupInputProps> {
                     </div>
                 </div>
                 <div className="group-input--inputs">
-                    {value.map((v, valueIndex) =>
+                    {value && value.map((v, valueIndex) =>
                         <div className="group-input--group-input-wrapper" key={valueIndex}>
                             <div className="group-input--group-input">
                                 {
@@ -64,12 +61,22 @@ export class GroupInput extends React.PureComponent<GroupInputProps> {
 
     @autobind
     private onAdd() {
-        // const { onChanged } = this.props;
+        const { onChanged, value } = this.props;
+
+        let newValue = (value || []).slice(0);
+        newValue.push(null);
+
+        onChanged(newValue);
     }
 
     @autobind
     private onRemove() {
-        //
+        const { onChanged, value } = this.props;
+
+        let newValue = value || [];
+        if (newValue.length > 0) {
+            onChanged(newValue.slice(0, newValue.length - 1));
+        }
     }
 
     @autobind
@@ -77,8 +84,8 @@ export class GroupInput extends React.PureComponent<GroupInputProps> {
     private onChanged(index: number, newValue: any) {
         const { onChanged, value } = this.props;
 
-        const x = value.slice(0);
-        x[index] = newValue;
-        onChanged(x);
+        const clone = value.slice(0);
+        clone[index] = newValue;
+        onChanged(clone);
     }
 }

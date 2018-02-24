@@ -33,7 +33,14 @@ export class InputComponent extends React.PureComponent<InputComponentProps> {
                 return <TeamSelector input={input} value={value} onChanged={this.onInputChanged} />;
 
             case TemplateInputTypes.Group:
-                return <GroupInput input={input} value={value} onRenderInput={this.renderInput} onChanged={this.onInputChanged} />;
+                return (
+                    <GroupInput
+                        input={input}
+                        value={value}
+                        onRenderInput={this.renderInput}
+                        onChanged={this.onInputChanged}
+                    />
+                );
 
             case TemplateInputTypes.TextInput:
                 return <TextInput input={input} value={value} onChanged={this.onInputChanged} />;

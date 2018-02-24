@@ -40,7 +40,7 @@ let _config: IBoardConfiguration = {
                         "name": "Active",
                         "field": {
                             displayName: "State",
-                            referenceName: "System.State"
+                            referenceName: FieldReferenceNames.State
                         } as IFieldReference,
                         "values": [
                             "Active"
@@ -50,7 +50,7 @@ let _config: IBoardConfiguration = {
                         "name": "Resolved",
                         "field": {
                             displayName: "State",
-                            referenceName: "System.State"
+                            referenceName: FieldReferenceNames.State
                         } as IFieldReference,
                         "values": [
                             "Resolved", "Completed"
@@ -80,7 +80,7 @@ export class BoardService {
                     id: 1,
                     values: {
                         [FieldReferenceNames.Title]: "As a user I want to use the software",
-                        "State": "Active",
+                        [FieldReferenceNames.State]: "Active",
                         "IsBlocked": "Blocked",
                         "Parent": "Feature 1",
                         "Tags": "Project 1",
@@ -91,7 +91,7 @@ export class BoardService {
                     id: 10,
                     values: {
                         [FieldReferenceNames.Title]: "As a user I want to use the software",
-                        "State": "Active",
+                        [FieldReferenceNames.State]: "Active",
                         "IsBlocked": "Blocked",
                         "Parent": "Feature 1",
                         "Tags": "Project 2",
@@ -102,7 +102,7 @@ export class BoardService {
                     id: 11,
                     values: {
                         [FieldReferenceNames.Title]: "As a user I want to use the software",
-                        "State": "Active",
+                        [FieldReferenceNames.State]: "Active",
                         "IsBlocked": "Blocked",
                         "Parent": "Feature 1",
                         "Tags": "Project 1",
@@ -113,7 +113,7 @@ export class BoardService {
                     id: 2,
                     values: {
                         [FieldReferenceNames.Title]: "As a user I want to use the software",
-                        "State": "Resolved",
+                        [FieldReferenceNames.State]: "Resolved",
                         "IsBlocked": "Blocked",
                         "Parent": "Feature 1",
                         "Tags": "Project 2",
@@ -124,7 +124,7 @@ export class BoardService {
                     id: 3,
                     values: {
                         [FieldReferenceNames.Title]: "As a user I want to use the software",
-                        "State": "Active",
+                        [FieldReferenceNames.State]: "Active",
                         "IsBlocked": "Not Blocked",
                         "Parent": "Epic 2",
                         "Tags": "Project 1",
