@@ -8,7 +8,9 @@ import { autobind } from "@uifabric/utilities";
 export interface IFieldSelectorProps {
     input: IPartitionProviderTemplateInput;
 
-    onChanged(): void;
+    value: IFieldReference;
+
+    onChanged(value: IFieldReference): void;
 }
 
 export interface IFieldSelectorState {
@@ -39,13 +41,14 @@ export class FieldSelector extends React.PureComponent<IFieldSelectorProps, IFie
     }
 
     render(): JSX.Element {
-        const { input } = this.props;
+        const { input, value } = this.props;
         const { fields } = this.state;
 
         return (
             <Dropdown
                 onChanged={this.onChanged}
                 label={input.label || "Select field"}
+                selectedKey={value && value && value.referenceName}
                 options={fields.map(f => ({
                     ...f,
                     key: f.referenceName,
@@ -59,7 +62,10 @@ export class FieldSelector extends React.PureComponent<IFieldSelectorProps, IFie
     private onChanged(option: IFieldSelectorOption) {
         const { onChanged } = this.props;
         if (onChanged) {
-            onChanged();
+            onChanged({
+                referenceName: option.referenceName,
+                displayName: option.displayName
+            });
         }
     }
 }

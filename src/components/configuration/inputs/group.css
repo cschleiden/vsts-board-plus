@@ -1,5 +1,4 @@
 .group-input {
-    background: #EEE;
 }
 
 .group-input--header {
@@ -25,4 +24,8 @@
 
 .group-input--inputs {
     padding: 5px;
+}
+
+.group-input--group-input {
+    margin-bottom: 5px;
 }

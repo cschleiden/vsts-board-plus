@@ -44,6 +44,16 @@ function setQuery(state: IConfigurationState, queryId: typeof Actions.setQuery.p
     return state.__set(x => x.queryId, queryId);
 }
 
+function updateInputs(state: IConfigurationState, payload: typeof Actions.updateInputs.payload): IConfigurationState {
+    const { index, direction, inputs } = payload;
+
+    if (direction === "horizontal") {
+        return state.__set(x => x.horizontalPartitionProviders[index].inputs, inputs);
+    } else {
+        return state.__set(x => x.verticalPartitionProviders[index].inputs, inputs);
+    }
+}
+
 export default reducerMap(
     initialState,
     [
@@ -51,6 +61,7 @@ export default reducerMap(
         [Actions.addPartition, addTemplate],
         [Actions.removePartition, removeTemplate],
         [Actions.setName, setName],
-        [Actions.setQuery, setQuery]
+        [Actions.setQuery, setQuery],
+        [Actions.updateInputs, updateInputs]
     ]
 );

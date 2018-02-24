@@ -1,6 +1,6 @@
 import "./partitionProviderListItem.css";
 import * as React from "react";
-import { IPartitionProviderConfiguration } from "../../model/interfaces";
+import { IPartitionProviderConfiguration, IPartitionProviderInputs } from "../../model/interfaces";
 import { IconButton } from "office-ui-fabric-react/lib/Button";
 import { InputComponent } from "./inputs";
 import { autobind } from "@uifabric/utilities";
@@ -9,13 +9,15 @@ import { getTemplateByType } from "../../data/partitionProviderTemplates";
 export interface IPartitionProviderListItemProps {
     config: IPartitionProviderConfiguration;
     index: number;
-    onRemove?(index: number): void;
+
+    onRemove(index: number): void;
+    onUpdate(index: number, inputs: IPartitionProviderInputs): void;
 }
 
 export class PartitionProviderListItem extends React.Component<IPartitionProviderListItemProps> {
     public render(): JSX.Element {
         const { config } = this.props;
-        const { type } = config;
+        const { type, inputs } = config;
         const template = getTemplateByType(type);
 
         return (
@@ -38,15 +40,37 @@ export class PartitionProviderListItem extends React.Component<IPartitionProvide
                 </div>
 
                 <div className="partition-provider-list-item-inputs">
-                    {template.inputs.map((input, index) => (
-                        <InputComponent
-                            key={index}
-                            input={input}
-                        />
-                    ))}
+                    {template.inputs.map((input, index) => {
+                        if (!input.inputKey) {
+                            throw new Error("InputKey required");
+                        }
+
+                        return (
+                            <InputComponent
+                                key={index}
+                                input={input}
+                                value={inputs}
+                                onUpdate={this.onUpdate}
+                            />
+                        );
+                    })}
                 </div>
             </div>
         );
+    }
+
+    @autobind
+    private onUpdate(inputs: IPartitionProviderInputs) {
+        const { index, onUpdate } = this.props;
+
+        // const updatedInputs = {
+        //     ...config.inputs,
+        //     []: value
+        // };
+
+        if (onUpdate) {
+            onUpdate(index, inputs);
+        }
     }
 
     @autobind

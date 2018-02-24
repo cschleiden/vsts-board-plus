@@ -8,7 +8,8 @@ const templates: IPartitionProviderTemplate[] = [
         description: "Generates a partition for every unique field value of the work items on the board for a given field.",
         inputs: [
             {
-                type: TemplateInputTypes.Field
+                type: TemplateInputTypes.Field,
+                inputKey: "field"
             }
         ],
         legendType: PartitionProviderLegendType.Text,
@@ -21,17 +22,21 @@ const templates: IPartitionProviderTemplate[] = [
         inputs: [
             {
                 type: TemplateInputTypes.Group,
+                inputKey: "partitions",
                 label: "Partitions",
                 group: [
                     {
                         type: TemplateInputTypes.TextInput,
-                        label: "Partition Name"
+                        label: "Partition Name",
+                        inputKey: "name"
                     },
                     {
-                        type: TemplateInputTypes.Field
+                        type: TemplateInputTypes.Field,
+                        inputKey: "field"
                     },
                     {
                         type: TemplateInputTypes.Group,
+                        inputKey: "values",
                         label: "Field Values (OR)",
                         group: [
                             {
@@ -62,7 +67,8 @@ const templates: IPartitionProviderTemplate[] = [
         description: "Generates a partition for every direct member of the given team.",
         inputs: [
             {
-                type: TemplateInputTypes.Team
+                type: TemplateInputTypes.Team,
+                inputKey: "team"
             }
         ],
         legendType: PartitionProviderLegendType.Card,
@@ -75,6 +81,7 @@ const templates: IPartitionProviderTemplate[] = [
         inputs: [
             {
                 type: TemplateInputTypes.Group,
+                inputKey: "teams",
                 label: "Teams",
                 group: [
                     {

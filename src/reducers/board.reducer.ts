@@ -29,6 +29,11 @@ function init(state: IBoardState, payload: typeof Actions.init.payload): IBoardS
     });
 }
 
+function refresh(state: IBoardState, config: typeof Actions.refresh.payload): IBoardState {
+    return state
+        .__set(x => x.config, config);
+}
+
 function updateItems(state: IBoardState, items: typeof Actions.updateItems.payload): IBoardState {
     // TODO: Place all items
     // TODO: Replace partitions? 
@@ -65,6 +70,7 @@ export default reducerMap(
     [
         [Actions.init, init],
         [Actions.updateItem, updateItem],
-        [Actions.updateItems, updateItems]
+        [Actions.updateItems, updateItems],
+        [Actions.refresh, refresh]
     ]
 );

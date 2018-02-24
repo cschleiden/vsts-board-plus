@@ -11,6 +11,6 @@ export const configureBoard = (boardId: string) => asyncActionCreator(async (dis
     return dispatch(ConfigurationActions.setConfig(config));
 });
 
-export const cancelBoardConfiguration = (boardId: string) => asyncActionCreator(async (dispatch) => {
+export const cancelBoardConfiguration = () => asyncActionCreator(async (dispatch) => {
     return dispatch(NavActions.toggleConfigurationPanel(false));
 });

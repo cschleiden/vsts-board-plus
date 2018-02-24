@@ -68,6 +68,8 @@ export interface IPartitionProviderTemplate {
 export interface IPartitionProviderTemplateInput {
     type: TemplateInputTypes;
 
+    inputKey?: string;
+
     label?: string;
 
     inputs?: Object;
@@ -178,4 +180,10 @@ export interface IFieldReference {
     referenceName: string;
 
     displayName: string;
+}
+
+export interface ITeamReference {
+    id: string;
+
+    name: string;
 }

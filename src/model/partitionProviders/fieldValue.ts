@@ -28,7 +28,7 @@ const FieldValuePartitionProvider: IPartitionProvider = {
         return Promise.resolve(
             Array.from(set).map(value => ({
                 label: value && value.toString() || "",
-                value: value.toString(),
+                value: value && value.toString(),
                 fieldName: fieldReference.referenceName,
                 legendType: PartitionProviderLegendType.Text
             }))

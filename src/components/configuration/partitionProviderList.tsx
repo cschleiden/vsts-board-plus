@@ -1,7 +1,7 @@
 import "./partitionProviderList.css";
 import * as React from "react";
 import { Dropdown } from "office-ui-fabric-react/lib/Dropdown";
-import { IPartitionProviderTemplate, IPartitionProviderConfiguration } from "../../model/interfaces";
+import { IPartitionProviderTemplate, IPartitionProviderConfiguration, IPartitionProviderInputs, PartitionProviderType } from "../../model/interfaces";
 import { PartitionProviderListItem } from "./partitionProvider";
 import templates from "../../data/partitionProviderTemplates";
 import { autobind } from "@uifabric/utilities";
@@ -13,19 +13,21 @@ interface IListTemplate extends IPartitionProviderTemplate, ISelectableOption {
 export interface IPartitionProviderListProps {
     partitionProviders: IPartitionProviderConfiguration[];
 
-    onAdd(template: IPartitionProviderTemplate): void;
+    onAdd(type: PartitionProviderType): void;
     onRemove(index: number): void;
+
+    onUpdate(indes: number, inputs: IPartitionProviderInputs): void;
 }
 
 export class PartitionProviderList extends React.Component<IPartitionProviderListProps> {
     public render(): JSX.Element {
-        const { partitionProviders, onRemove } = this.props;
+        const { partitionProviders, onUpdate, onRemove } = this.props;
 
         return (
             <div className="partition-provider-list">
                 {partitionProviders.map(
                     (config, index) => (
-                        <PartitionProviderListItem key={index} index={index} config={config} onRemove={onRemove} />
+                        <PartitionProviderListItem key={index} index={index} config={config} onUpdate={onUpdate} onRemove={onRemove} />
                     ))}
 
                 <div className="partition-provider-list--add">
@@ -59,7 +61,7 @@ export class PartitionProviderList extends React.Component<IPartitionProviderLis
     private addTemplate(template: IListTemplate): void {
         const { onAdd } = this.props;
 
-        onAdd(template);
+        onAdd(template.type);
 
         this.forceUpdate();
     }

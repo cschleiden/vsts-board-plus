@@ -1,55 +1,62 @@
 import * as React from "react";
 import { Dropdown } from "office-ui-fabric-react/lib/Dropdown";
-import { FieldService } from "../../../model/fieldService";
-import { IFieldReference, IPartitionProviderTemplateInput } from "../../../model/interfaces";
+import { ITeamReference, IPartitionProviderTemplateInput } from "../../../model/interfaces";
 import { ISelectableOption } from "office-ui-fabric-react/lib/utilities/selectableOption/SelectableOption.types";
 import { autobind } from "@uifabric/utilities";
 
 export interface ITeamSelectorProps {
     input: IPartitionProviderTemplateInput;
 
-    onChanged(): void;
+    value: string;
+
+    onChanged(value: ITeamReference): void;
 }
 
 export interface ITeamSelectorState {
-    fields: IFieldReference[];
+    teams: ITeamReference[];
 }
 
-interface ITeamSelectorOption extends ISelectableOption, IFieldReference {
+interface ITeamSelectorOption extends ISelectableOption, ITeamReference {
 }
 
 export class TeamSelector extends React.PureComponent<ITeamSelectorProps, ITeamSelectorState> {
-    fieldService: FieldService;
-
     constructor(props: ITeamSelectorProps) {
         super(props);
 
         this.state = {
-            fields: []
+            teams: []
         };
     }
 
     async componentDidMount() {
-        this.fieldService = new FieldService();
-
-        const fields = await this.fieldService.getFields();
+        const teams: ITeamReference[] = [
+            {
+                name: "Team Blue",
+                id: "teamblue"
+            },
+            {
+                name: "Team Red",
+                id: "teamread"
+            }
+        ];
         this.setState({
-            fields
+            teams
         });
     }
 
     render(): JSX.Element {
-        const { input } = this.props;
-        const { fields } = this.state;
+        const { input, value } = this.props;
+        const { teams } = this.state;
 
         return (
             <Dropdown
                 onChanged={this.onChanged}
                 label={input.label || "Select team"}
-                options={fields.map(f => ({
+                selectedKey={value}
+                options={teams.map(f => ({
                     ...f,
-                    key: f.referenceName,
-                    text: f.displayName
+                    key: f.id,
+                    text: f.name
                 } as ITeamSelectorOption))}
             />
         );
@@ -59,7 +66,10 @@ export class TeamSelector extends React.PureComponent<ITeamSelectorProps, ITeamS
     private onChanged(option: ITeamSelectorOption) {
         const { onChanged } = this.props;
         if (onChanged) {
-            onChanged();
+            onChanged({
+                id: option.id,
+                name: option.name
+            });
         }
     }
 }

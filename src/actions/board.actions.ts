@@ -11,6 +11,8 @@ export const init = makeAction<{
     horizontalPartitions: IPartition[][];
 }>("board-init");
 
+export const refresh = makeAction<IBoardConfiguration>("board-refresh");
+
 export const updateItems = makeAction<IItem[]>("board-items");
 
 export const updateItem = makeAction<{ id: number; fieldChanges: IFieldValueMap; }>("board-update-item");
