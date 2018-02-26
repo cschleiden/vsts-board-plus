@@ -164,15 +164,12 @@ export class BoardService {
 
         const witService = new WitService();
         const workItemIds = await witService.runQuery(queryId);
-        const values = await witService.pageFields(workItemIds, pageFields);
+        const workItems = await witService.pageFields(workItemIds, pageFields);
 
-        return values.map(v => {
-            const id = v[0] as number;
-
+        return workItems.map(workItem => {
             return {
-                id,
-                // Transform paged array to dictionary
-                values: v.reduce((d, currentValue, index) => d[pageFields[index]] = currentValue, {})
+                id: workItem.id,
+                values: workItem.fields
             };
         });
     }

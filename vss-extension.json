@@ -1,0 +1,64 @@
+{
+    "manifestVersion": 1,
+    "version": "0.0.1",
+    "name": "Boards+",
+    "scopes": [
+        "vso.work_write"
+    ],
+    "description": "Customizable boards",
+    "publisher": "cschleiden",
+    "id": "boardsplus",
+    "icons": {
+        "default": "marketplace/logo.png"
+    },
+    "targets": [
+        {
+            "id": "Microsoft.VisualStudio.Services"
+        }
+    ],
+    "demands": [
+        "api-version/3.0"
+    ],
+    "galleryFlags": [
+        "Preview"
+    ],
+    "tags": [
+        "Pull Requests",
+        "Templates"
+    ],
+    "content": {
+        "details": {
+            "path": "marketplace/details.md"
+        }
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/cschleiden/vsts-boardplus"
+    },
+    "links": {
+        "support": {
+            "url": "mailto:christopher.schleiden@microsoft.com"
+        }
+    },
+    "branding": {
+        "color": "rgb(220, 235, 252)",
+        "theme": "light"
+    },
+    "categories": [
+        "Code"
+    ],
+    "contributions": [
+        {
+            "id": "boards-plus-hub",
+            "type": "ms.vss-web.hub",
+            "targets": [
+                "ms.vss-web.work-hub-group"
+            ],
+            "properties": {
+                "name": "Boards+",
+                "order": 1,
+                "uri": "src/index.html"
+            }
+        }
+    ]
+}

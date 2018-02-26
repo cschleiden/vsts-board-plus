@@ -20,13 +20,15 @@
     "strictNullChecks": false,
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
+    "baseUrl": ".",
     "types": [
       "react",
       "react-dom",
       "react-beautiful-dnd",
       "redux",
       "react-redux",
-      "jest"
+      "jest",
+      "vss-web-extension-sdk"
     ]
   },
   "exclude": [
