@@ -14,3 +14,7 @@ export const configureBoard = (boardId: string) => asyncActionCreator(async (dis
 export const cancelBoardConfiguration = () => asyncActionCreator(async (dispatch) => {
     return dispatch(NavActions.toggleConfigurationPanel(false));
 });
+
+export const switchView = (view: string) => asyncActionCreator(async (dispatch) => {
+    return dispatch(NavActions.switchView(view));
+});

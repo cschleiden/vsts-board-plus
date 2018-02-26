@@ -14,10 +14,10 @@ import {
 const FieldValuePartitionProvider: IPartitionProvider = {
     type: PartitionProviderType.FieldValue,
 
-    getRequiredFields(configuration: IPartitionProviderConfiguration): string[] {
+    getRequiredFields(configuration: IPartitionProviderConfiguration): Promise<string[]> {
         const fieldReference: IFieldReference = configuration.inputs["field"];
 
-        return [fieldReference.referenceName];
+        return Promise.resolve([fieldReference.referenceName]);
     },
 
     getPartitions(configuration: IPartitionProviderConfiguration, items: IItem[]): Promise<IPartition[]> {

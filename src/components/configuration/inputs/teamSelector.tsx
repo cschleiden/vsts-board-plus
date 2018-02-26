@@ -7,7 +7,7 @@ import { autobind } from "@uifabric/utilities";
 export interface ITeamSelectorProps {
     input: IPartitionProviderTemplateInput;
 
-    value: string;
+    value: ITeamReference;
 
     onChanged(value: ITeamReference): void;
 }
@@ -52,7 +52,7 @@ export class TeamSelector extends React.PureComponent<ITeamSelectorProps, ITeamS
             <Dropdown
                 onChanged={this.onChanged}
                 label={input.label || "Select team"}
-                selectedKey={value}
+                selectedKey={value && value.id}
                 options={teams.map(f => ({
                     ...f,
                     key: f.id,

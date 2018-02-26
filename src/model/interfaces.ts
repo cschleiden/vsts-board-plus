@@ -40,7 +40,7 @@ export interface IItemPlacement {
 export interface IPartitionProvider {
     readonly type: PartitionProviderType;
 
-    getRequiredFields(configuration: IPartitionProviderConfiguration): string[];
+    getRequiredFields(configuration: IPartitionProviderConfiguration): Promise<string[]>;
 
     getPartitions(configuration: IPartitionProviderConfiguration, items: IItem[]): Promise<IPartition[]>;
 }

@@ -19,10 +19,10 @@ export interface IStaticPartitionProviderInputs {
 const Provider: IPartitionProvider = {
     type: PartitionProviderType.Static,
 
-    getRequiredFields(configuration: IPartitionProviderConfiguration): string[] {
-        const fieldReference: IFieldReference = configuration.inputs["field"];
+    getRequiredFields(configuration: IPartitionProviderConfiguration): Promise<string[]> {
+        const inputs = configuration.inputs as IStaticPartitionProviderInputs;
 
-        return [fieldReference.referenceName];
+        return Promise.resolve(inputs.partitions.map(p => p.field.referenceName));
     },
 
     getPartitions(configuration: IPartitionProviderConfiguration, items: IItem[]): Promise<IPartition[]> {

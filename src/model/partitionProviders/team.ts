@@ -10,24 +10,23 @@ import {
 /**
  * Partition provider that creates one partition for every unique field value
  */
-const ParentPartitionProvider: IPartitionProvider = {
+const TeamPartitionProvider: IPartitionProvider = {
     type: PartitionProviderType.Parent,
 
     getRequiredFields(configuration: IPartitionProviderConfiguration): Promise<string[]> {
-        // TODO: Run extra query here to determine parent for items?
         return Promise.resolve([]);
     },
 
     getPartitions(configuration: IPartitionProviderConfiguration, items: IItem[]): Promise<IPartition[]> {
         return Promise.resolve(
             [{
-                fieldName: "Parent",
-                label: "Parent",
+                fieldName: "Team",
+                label: "Team",
                 value: null,
-                legendType: PartitionProviderLegendType.Card,
+                legendType: PartitionProviderLegendType.Text,
             } as IPartition]
         );
     }
 };
 
-export default ParentPartitionProvider;
+export default TeamPartitionProvider;
