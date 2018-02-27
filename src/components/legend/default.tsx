@@ -1,4 +1,4 @@
-import "./default.css";
+import "./default.scss";
 import * as React from "react";
 import { css } from "../../utils/css";
 

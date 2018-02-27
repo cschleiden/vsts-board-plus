@@ -1,8 +1,10 @@
-import "./card.css";
+import "./card.scss";
 import * as React from "react";
 import { IItem } from "../model/interfaces";
 import { FieldReferenceNames } from "../model/constants";
 import { DraggableProvided } from "react-beautiful-dnd";
+import { autobind } from "@uifabric/utilities";
+import { WorkItemFormNavigationService } from "TFS/WorkItemTracking/Services";
 
 export interface ICardSettings {
     showId?: boolean;
@@ -45,10 +47,23 @@ export class Card extends React.PureComponent<ICardProps> {
                         )
                     }
                     <div className="card--title">
-                        {title || ""}
+                        <a href="" onClick={this.openWorkItem}>{title || ""}</a>
                     </div>
                 </div>
             </div>
         );
+    }
+
+    @autobind
+    private openWorkItem(ev: React.MouseEvent<HTMLAnchorElement>) {
+        const { item } = this.props;
+
+        if (!ev.ctrlKey && !ev.metaKey && !ev.shiftKey) {
+            WorkItemFormNavigationService.getService().then(service => {
+                service.openWorkItem(item.id);
+            });
+
+            ev.preventDefault();
+        }
     }
 }

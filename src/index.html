@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <script src="../libs/VSS.SDK.min.js"></script>
+</head>
+
+<body>
+    <script type="text/javascript">
+        // Initialize framework 
+        VSS.init({
+            explicitNotifyLoaded: true,
+            usePlatformScripts: true,
+            moduleLoaderConfig: {}
+        });
+
+        VSS.require(["src/index"], function () {
+            // Loading succeeded
+            VSS.notifyLoadSucceeded();
+        });
+    </script>
+
+    <div id="root"></div>
+</body>
+
+</html>

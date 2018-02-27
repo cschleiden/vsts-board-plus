@@ -1,26 +1,16 @@
 {
   "compilerOptions": {
-    "outDir": "build/dist",
-    "module": "esnext",
+    "module": "amd",
+    "sourceMap": false,
     "target": "es5",
-    "lib": [
-      "es6",
-      "dom"
-    ],
-    "sourceMap": true,
-    "allowJs": true,
     "jsx": "react",
-    "experimentalDecorators": true,
     "moduleResolution": "node",
-    "rootDir": "src",
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noImplicitAny": false,
-    "strictNullChecks": false,
-    "suppressImplicitAnyIndexErrors": true,
-    "noUnusedLocals": true,
-    "baseUrl": ".",
+    "experimentalDecorators": true,
+    "lib": [
+      "dom",
+      "es2015",
+      "es2015.promise"
+    ],
     "types": [
       "react",
       "react-dom",
@@ -31,13 +21,11 @@
       "vss-web-extension-sdk"
     ]
   },
-  "exclude": [
-    "node_modules",
-    "build",
-    "scripts",
-    "acceptance-tests",
-    "webpack",
-    "jest",
-    "src/setupTests.ts"
+  "typeAcquisition": {
+    "enable": true
+  },
+  "filesGlob": [
+    "src/**/*.ts",
+    "src/**/*.tsx"
   ]
 }

@@ -23,6 +23,18 @@ export const initBoard = (boardId: string) => asyncActionCreator(async (dispatch
     }));
 });
 
+export const createBoard = () => asyncActionCreator(async (dispatch) => {
+    const boardService = new BoardService();
+    const emptyConfig = await boardService.createBoard();
+
+    return dispatch(init({
+        config: emptyConfig,
+        items: [],
+        verticalPartitions: [],
+        horizontalPartitions: []
+    }))
+});
+
 export const dropCard = (id: number, location: IDropLocation) => asyncActionCreator(async (dispatch) => {
     const fieldChanges: IFieldValueMap = {};
 

@@ -1,4 +1,7 @@
 .legend-default {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .legend-default--vertical {

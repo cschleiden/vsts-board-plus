@@ -1,4 +1,4 @@
-import "./configurationPanel.css";
+import "./configurationPanel.scss";
 import * as React from "react";
 import { connect } from "react-redux";
 import { Panel, PanelType } from "office-ui-fabric-react/lib/Panel";

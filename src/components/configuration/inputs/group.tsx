@@ -1,4 +1,4 @@
-import "./group.css";
+import "./group.scss";
 import * as React from "react";
 import { IPartitionProviderTemplateInput } from "../../../model/interfaces";
 import { IconButton } from "office-ui-fabric-react/lib/Button";

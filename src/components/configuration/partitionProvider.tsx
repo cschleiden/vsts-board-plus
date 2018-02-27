@@ -1,4 +1,4 @@
-import "./partitionProviderListItem.css";
+import "./partitionProviderListItem.scss";
 import * as React from "react";
 import { IPartitionProviderConfiguration, IPartitionProviderInputs } from "../../model/interfaces";
 import { IconButton } from "office-ui-fabric-react/lib/Button";

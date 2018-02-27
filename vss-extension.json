@@ -1,6 +1,6 @@
 {
     "manifestVersion": 1,
-    "version": "0.0.1",
+    "version": "0.0.4",
     "name": "Boards+",
     "scopes": [
         "vso.work_write"
@@ -52,7 +52,7 @@
             "id": "boards-plus-hub",
             "type": "ms.vss-web.hub",
             "targets": [
-                "ms.vss-web.work-hub-group"
+                "ms.vss-work-web.work-hub-group"
             ],
             "properties": {
                 "name": "Boards+",

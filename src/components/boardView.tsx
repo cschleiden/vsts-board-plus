@@ -1,5 +1,5 @@
 import { autobind } from "office-ui-fabric-react/lib/Utilities";
-import "./board.css";
+import "./board.scss";
 import * as React from "react";
 import { IPartition, IDropLocation, IItemPlacement } from "../model/interfaces";
 import { css } from "../utils/css";
@@ -35,7 +35,7 @@ export class BoardView extends React.PureComponent<IBoardProps> {
                 <div
                     className="board"
                     style={{
-                        gridTemplateColumns: `repeat(${numLegendColumns}, minmax(24px, auto)) repeat(${numContentColumns}, 1fr)`,
+                        gridTemplateColumns: `repeat(${numLegendColumns}, minmax(24px, 24px)) repeat(${numContentColumns}, minmax(100px, 200px))`,
                         gridTemplateRows: `repeat(${numLegendRows}, 24px) repeat(${numContentRows}, minmax(100px, auto))`
                     }}
                 >

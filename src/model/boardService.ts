@@ -1,3 +1,4 @@
+import { ExtensionDataService } from "VSS/SDK/Services/ExtensionData";
 import { IBoardConfiguration, IItem, PartitionProviderType, IFieldReference } from "./interfaces";
 import { FieldReferenceNames } from "./constants";
 import { IStaticPartitionProviderInputs } from "./partitionProviders/static";
@@ -6,7 +7,7 @@ import { WitService } from "../services/witService";
 
 let _config: IBoardConfiguration = {
     id: "boardId",
-    queryId: "10d9719d-e7f9-4f9a-b08a-f6a49595d563",
+    queryId: "d598c8b5-3925-4baa-895b-66ec73ff6a81",
     name: "My Board",
 
     verticalPartitionProviders: [
@@ -17,8 +18,8 @@ let _config: IBoardConfiguration = {
             type: PartitionProviderType.FieldValue,
             inputs: {
                 "field": {
-                    displayName: "IsBlocked",
-                    referenceName: "IsBlocked"
+                    displayName: "Iteration",
+                    referenceName: "System.IterationPath"
                 } as IFieldReference
             }
         }
@@ -124,11 +125,22 @@ let _config: IBoardConfiguration = {
 
 const RequiredFields: string[] = [
     FieldReferenceNames.Id,
+    FieldReferenceNames.Title,
     FieldReferenceNames.WorkItemType,
     FieldReferenceNames.TeamProject
 ];
 
 export class BoardService {
+    async createBoard(): Promise<IBoardConfiguration> {
+        return {
+            id: "new",
+            name: "New Board",
+            queryId: "",
+            horizontalPartitionProviders: [],
+            verticalPartitionProviders: []
+        };
+    }
+
     async getBoards(): Promise<IBoardConfiguration[]> {
         return [_config];
     }

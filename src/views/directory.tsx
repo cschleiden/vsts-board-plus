@@ -7,7 +7,7 @@ import { PivotBarItem } from "vss-ui/PivotBar";
 import { DetailsList, SelectionMode } from "office-ui-fabric-react/lib/DetailsList";
 import { connect } from "react-redux";
 import { IState } from "../reducers";
-import { initDirectory } from "../actions/directory.actionsCreators";
+import { initDirectory, newBoard } from "../actions/directory.actionsCreators";
 import { autobind } from "@uifabric/utilities";
 import { initBoard } from "../actions/board.actionsCreator";
 
@@ -16,6 +16,7 @@ interface DirectoryViewProps {
 
     init(): void;
     openBoard(boardId: string): void;
+    createBoard(): void;
 }
 
 class DirectoryView extends React.Component<DirectoryViewProps> {
@@ -48,7 +49,8 @@ class DirectoryView extends React.Component<DirectoryViewProps> {
                                 disabled: false,
                                 iconProps: {
                                     iconName: "Add"
-                                }
+                                },
+                                onClick: this.createBoard
                             }
                         ]}
                 >
@@ -84,6 +86,12 @@ class DirectoryView extends React.Component<DirectoryViewProps> {
         const { openBoard } = this.props;
         openBoard(item.id);
     }
+
+    @autobind
+    private createBoard() {
+        const { createBoard } = this.props;
+        createBoard();
+    }
 }
 
 export default connect(
@@ -96,6 +104,7 @@ export default connect(
     },
     (dispatch) => ({
         init: () => { dispatch(initDirectory()); },
-        openBoard: (boardId: string) => { dispatch(initBoard(boardId)); }
+        openBoard: (boardId: string) => { dispatch(initBoard(boardId)); },
+        createBoard: () => { dispatch(newBoard()); }
     })
 )(DirectoryView);

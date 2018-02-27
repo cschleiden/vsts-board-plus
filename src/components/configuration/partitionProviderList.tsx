@@ -1,4 +1,4 @@
-import "./partitionProviderList.css";
+import "./partitionProviderList.scss";
 import * as React from "react";
 import { Dropdown } from "office-ui-fabric-react/lib/Dropdown";
 import { IPartitionProviderTemplate, IPartitionProviderConfiguration, IPartitionProviderInputs, PartitionProviderType } from "../../model/interfaces";
