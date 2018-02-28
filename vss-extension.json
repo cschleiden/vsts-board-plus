@@ -1,6 +1,6 @@
 {
     "manifestVersion": 1,
-    "version": "0.0.4",
+    "version": "0.0.5",
     "name": "Boards+",
     "scopes": [
         "vso.work_write"
@@ -57,7 +57,7 @@
             "properties": {
                 "name": "Boards+",
                 "order": 1,
-                "uri": "src/index.html"
+                "uri": "index.html"
             }
         }
     ]

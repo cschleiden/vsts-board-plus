@@ -19,6 +19,8 @@ declare var require: any;
 
 // Support HMR
 if (module.hot) {
+  console.log("Applying update...");
+
   module.hot.accept("./App", () => {
     const NextApp = require("./App").default;
     ReactDOM.render(

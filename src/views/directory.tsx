@@ -57,7 +57,7 @@ class DirectoryView extends React.Component<DirectoryViewProps> {
 
                     <DetailsList
                         items={boards}
-                        selectionMode={SelectionMode.single}
+                        selectionMode={SelectionMode.none}
                         onItemInvoked={this.openBoard}
                         columns={[
                             {

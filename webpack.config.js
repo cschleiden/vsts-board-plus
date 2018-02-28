@@ -3,6 +3,7 @@ var webpack = require("webpack");
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
+    mode: "development",
     target: "web",
     entry: {
         index: "./src/index.tsx"
