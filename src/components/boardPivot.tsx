@@ -15,7 +15,7 @@ interface IBoardPivotProps {
     cells: IItemPlacement;
 
     init(): void;
-    onDrop(id: number, drop: IDropLocation): void;
+    onDrop(id: number, drop: IDropLocation, index: number): void;
 }
 
 class BoardPivot extends React.PureComponent<IBoardPivotProps> {
@@ -40,10 +40,10 @@ class BoardPivot extends React.PureComponent<IBoardPivotProps> {
     }
 
     @autobind
-    private onCardMove(id: number, drop: IDropLocation) {
+    private onCardMove(id: number, drop: IDropLocation, index: number) {
         const { onDrop } = this.props;
 
-        onDrop(id, drop);
+        onDrop(id, drop, index);
     }
 }
 
@@ -61,7 +61,7 @@ export default connect(
     (dispatch) => {
         return {
             init: () => { dispatch(initBoard("test-id")); },
-            onDrop: (id: number, drop: IDropLocation) => { dispatch(dropCard(id, drop)); }
+            onDrop: (id: number, drop: IDropLocation, index: number) => { dispatch(dropCard(id, drop, index)); }
         };
     }
 )(BoardPivot);

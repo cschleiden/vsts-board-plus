@@ -5,6 +5,8 @@ import { IconButton } from "office-ui-fabric-react/lib/Button";
 import { InputComponent } from "./inputs";
 import { autobind } from "@uifabric/utilities";
 import { getTemplateByType } from "../../data/partitionProviderTemplates";
+import { Icon } from "office-ui-fabric-react/lib/Icon";
+import { TooltipHost } from "office-ui-fabric-react/lib/Tooltip";
 
 export interface IPartitionProviderListItemProps {
     config: IPartitionProviderConfiguration;
@@ -27,8 +29,16 @@ export class PartitionProviderListItem extends React.Component<IPartitionProvide
                     <div className="partition-provider-list-item--name">
                         {template.displayName}
                     </div>
-
                     <div className="partition-provider-list-item--actions">
+
+                        <TooltipHost content={template.description}>
+                            <IconButton
+                                iconProps={{
+                                    iconName: "Info"
+                                }}
+                            />
+                        </TooltipHost>
+
                         <IconButton
                             iconProps={{
                                 iconName: "Delete"

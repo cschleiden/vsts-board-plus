@@ -2,18 +2,24 @@
 }
 
 .group-input--header {
-    display: flex;    
+    display: flex;
 
     line-height: 32px;
 
-    border-bottom: 2px aliceblue;
+    font-weight: 300;
+    // color: #333333;
+    font-size: 16px;
 }
 
 .group-input--label {
     flex: 1 1 auto;
 
     padding: 0px 5px;
-    font-weight: bold;
+//     font-weight: bold;
+}
+
+.group-input--description {    
+    padding: 0px 5px;
 }
 
 .group-input--actions {

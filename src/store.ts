@@ -1,15 +1,13 @@
-import { createStore } from "redux";
+import { applyMiddleware, compose, createStore } from "redux";
 import reducer from "./reducers";
 import thunk from "redux-thunk";
-import { applyMiddleware } from "redux";
-import { compose } from "redux";
+
+const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(
     reducer,
-    compose(
-        applyMiddleware(thunk),
-        // tslint:disable-next-line:no-any
-        (window as any).__REDUX_DEVTOOLS_EXTENSION__ && (window as any).__REDUX_DEVTOOLS_EXTENSION__()
+    composeEnhancers(
+        applyMiddleware(thunk)
     )
 );
 export default store;

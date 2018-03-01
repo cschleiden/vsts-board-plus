@@ -43,6 +43,11 @@ export class GroupInput extends React.PureComponent<GroupInputProps> {
                         />
                     </div>
                 </div>
+                {
+                    input.description && <div className="group-input--description">
+                        {input.description}
+                    </div>
+                }
                 <div className="group-input--inputs">
                     {value && value.map((v, valueIndex) =>
                         <div className="group-input--group-input-wrapper" key={valueIndex}>

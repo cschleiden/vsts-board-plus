@@ -14,10 +14,10 @@ export interface IBoardProps {
 
     cells: IItemPlacement;
 
-    onCardMove(id: number, drop: IDropLocation): void;
+    onCardMove(id: number, drop: IDropLocation, index: number): void;
 }
 
-export class BoardView extends React.PureComponent<IBoardProps> {
+export class BoardView extends React.Component<IBoardProps> {
     private cellMap: { [id: string]: IDropLocation } = {};
 
     render() {
@@ -131,7 +131,10 @@ export class BoardView extends React.PureComponent<IBoardProps> {
                         {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (
                             <div
                                 ref={provided.innerRef}
-                                className="cell"
+                                className={css(
+                                    "cell",
+                                    snapshot.isDraggingOver && "cell-drop"
+                                )}
                                 style={{
                                     gridColumn: 1 + numLegendColumns + (+x),
                                     gridRow: 1 + numLegendRows + (+y)
@@ -139,10 +142,11 @@ export class BoardView extends React.PureComponent<IBoardProps> {
                             >
                                 {
                                     /* Render current items in cell */
-                                    cellItems.map(item => (
+                                    cellItems.map((item, index) => (
                                         <Draggable
                                             draggableId={`${item.id}`}
                                             key={item.id}
+                                            {...{ index }}
                                         >
                                             {(dragProvided, dragSnapshot) => (
                                                 <div>
@@ -172,11 +176,13 @@ export class BoardView extends React.PureComponent<IBoardProps> {
     private onDragEnd(result: DropResult) {
         const { onCardMove } = this.props;
 
-        const id = result.destination.droppableId;
-        const cell = this.cellMap[id];
+        if (result && result.destination && result.destination.droppableId) {
+            const id = result.destination.droppableId;
+            const cell = this.cellMap[id];
 
-        if (onCardMove) {
-            onCardMove(+result.draggableId, cell);
+            if (onCardMove) {
+                onCardMove(+result.draggableId, cell, result.destination.index);
+            }
         }
     }
 }

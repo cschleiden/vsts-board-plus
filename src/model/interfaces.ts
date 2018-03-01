@@ -37,6 +37,11 @@ export interface IItemPlacement {
     [x: number]: { [y: number]: IItem[] };
 }
 
+export interface IItemPlacement2 {
+    x: number;
+    y: number;
+}
+
 export interface IPartitionProvider {
     readonly type: PartitionProviderType;
 
@@ -71,6 +76,8 @@ export interface IPartitionProviderTemplateInput {
     inputKey?: string;
 
     label?: string;
+
+    description?: string;
 
     inputs?: Object;
 
@@ -174,6 +181,8 @@ export interface IBoardConfiguration {
 // TODO...
 export interface IDropLocation {
     partitions: IPartition[];
+
+    index?: number;
 }
 
 export interface IFieldReference {

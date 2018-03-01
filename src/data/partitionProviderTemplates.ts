@@ -24,10 +24,11 @@ const templates: IPartitionProviderTemplate[] = [
                 type: TemplateInputTypes.Group,
                 inputKey: "partitions",
                 label: "Partitions",
+                description: "This is the description",
                 group: [
                     {
                         type: TemplateInputTypes.TextInput,
-                        label: "Partition Name",
+                        label: "Display Name",
                         inputKey: "name"
                     },
                     {

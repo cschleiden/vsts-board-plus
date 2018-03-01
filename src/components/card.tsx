@@ -22,7 +22,7 @@ export interface ICardProps {
     settings?: ICardSettings;
 }
 
-export class Card extends React.PureComponent<ICardProps> {
+export class Card extends React.Component<ICardProps> {
     public render(): JSX.Element {
         const { item, draggable, settings = defaultCardSettings } = this.props;
         const { id, values } = item;

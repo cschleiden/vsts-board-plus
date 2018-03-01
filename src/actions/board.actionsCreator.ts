@@ -35,12 +35,12 @@ export const createBoard = () => asyncActionCreator(async (dispatch) => {
     }))
 });
 
-export const dropCard = (id: number, location: IDropLocation) => asyncActionCreator(async (dispatch) => {
+export const dropCard = (id: number, location: IDropLocation, index: number) => asyncActionCreator(async (dispatch) => {
     const fieldChanges: IFieldValueMap = {};
 
     for (const partition of location.partitions) {
         fieldChanges[partition.fieldName] = partition.value;
     }
 
-    return dispatch(updateItem({ id, fieldChanges }));
+    return dispatch(updateItem({ id, fieldChanges, index }));
 });

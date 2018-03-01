@@ -10,6 +10,7 @@ import { cancelBoardConfiguration } from "../actions/nav.actionsCreators";
 import { TextField } from "office-ui-fabric-react/lib/TextField";
 import { Direction, PartitionProviderType, IPartitionProviderConfiguration, IPartitionProviderInputs } from "../model/interfaces";
 import { addTemplate, removeTemplate, updateName, updateQuery, updateInputs, saveConfig } from "../actions/configuration.actionsCreators";
+import { ChoiceGroup } from "office-ui-fabric-react/lib/ChoiceGroup";
 
 interface IConfigurationPanelProps {
     showPanel: boolean;
@@ -52,6 +53,7 @@ class ConfigurationPanel extends React.Component<IConfigurationPanelProps> {
 
         return (
             <Panel
+                className="configure-panel"
                 isOpen={showPanel}
                 headerText="Configure Board"
                 type={PanelType.medium}
@@ -59,6 +61,25 @@ class ConfigurationPanel extends React.Component<IConfigurationPanelProps> {
                 onRenderFooterContent={this._renderFooter}
             >
                 <TextField label="Name" value={name} onChanged={onNameChanged} />
+
+                <h3>Data Source</h3>
+
+                <ChoiceGroup
+                    defaultSelectedKey={"query"}
+                    options={[
+                        {
+                            key: "query",
+                            text: "Query",
+                            iconProps: { iconName: "QueryList" }
+                        },
+                        {
+                            key: "backlog",
+                            text: "Backlog",
+                            iconProps: { iconName: "Backlog" }
+                        }
+                    ]}
+                />
+
                 <TextField label="Query" value={queryId} onChanged={onQueryChanged} />
 
                 <h3>Partitions</h3>

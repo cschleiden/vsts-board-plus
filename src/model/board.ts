@@ -1,4 +1,4 @@
-import { IPartition, IItem, IItemPlacement } from "./interfaces";
+import { IPartition, IItem, IItemPlacement, IItemPlacement2 } from "./interfaces";
 
 export function iteratePartitions(partitions: IPartition[][], callback: (partitions: IPartition[], index: number) => void) {
     const numIterations = partitions
@@ -35,46 +35,16 @@ export function placeItemInPartitions(partitions: IPartition[], item: IItem): nu
     return null;
 }
 
-export function placeItems(horizontalPartitions: IPartition[][], verticalPartitions: IPartition[][], items: IItem[]): IItemPlacement {
+export function placeItems(
+    horizontalPartitions: IPartition[][],
+    verticalPartitions: IPartition[][],
+    items: IItem[]): IItemPlacement {
     const cells: IItemPlacement = {};
 
     for (const item of items) {
-        // Determine horizontal placement
-        let x: number | null = null;
+        const { x, y } = placeItem(horizontalPartitions, verticalPartitions, item);
 
-        for (let i = 0; i < horizontalPartitions.length; ++i) {
-            const p = placeItemInPartitions(horizontalPartitions[i], item);
-            if (p !== null) {
-                if (x === null) {
-                    x = p;
-                } else {
-                    x *= horizontalPartitions[i].length;
-                    x += p;
-                }
-            }
-        }
-
-        if (x === null) {
-            // Not on this board
-            continue;
-        }
-
-        // Determine vertical placement
-        let y: number | null = null;
-
-        for (let i = 0; i < verticalPartitions.length; ++i) {
-            const p = placeItemInPartitions(verticalPartitions[i], item);
-            if (p !== null) {
-                if (y === null) {
-                    y = p;
-                } else {
-                    y *= verticalPartitions[i].length;
-                    y += p;
-                }
-            }
-        }
-
-        if (y === null) {
+        if (x === null || y === null) {
             // Not on this board
             continue;
         }
@@ -92,4 +62,43 @@ export function placeItems(horizontalPartitions: IPartition[][], verticalPartiti
     }
 
     return cells;
+}
+
+export function placeItem(
+    horizontalPartitions: IPartition[][],
+    verticalPartitions: IPartition[][],
+    item: IItem): IItemPlacement2 {
+    let x: number | null = null;
+    let y: number | null = null;
+
+    for (let i = 0; i < horizontalPartitions.length; ++i) {
+        const p = placeItemInPartitions(horizontalPartitions[i], item);
+        if (p !== null) {
+            if (x === null) {
+                x = p;
+            } else {
+                x *= horizontalPartitions[i].length;
+                x += p;
+            }
+        }
+    }
+
+    if (x !== null) {
+        for (let i = 0; i < verticalPartitions.length; ++i) {
+            const p = placeItemInPartitions(verticalPartitions[i], item);
+            if (p !== null) {
+                if (y === null) {
+                    y = p;
+                } else {
+                    y *= verticalPartitions[i].length;
+                    y += p;
+                }
+            }
+        }
+    }
+
+    return {
+        x,
+        y
+    };
 }
