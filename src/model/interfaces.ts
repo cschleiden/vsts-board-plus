@@ -136,3 +136,14 @@ export interface ITeamReference {
 
     name: string;
 }
+
+export const enum DataSourceType {
+    Query,
+    Backlog
+}
+
+export interface IDataSource {
+    type: DataSourceType;
+
+    getItems(): Promise<number[]>;
+}
