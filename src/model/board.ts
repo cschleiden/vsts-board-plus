@@ -1,4 +1,4 @@
-import { IPartition, IItem, IItemPlacement, IItemPlacement2 } from "./interfaces";
+import { IPartition, IItem, IItemPlacement, IItemPlacementLocation } from "./interfaces";
 
 export function iteratePartitions(partitions: IPartition[][], callback: (partitions: IPartition[], index: number) => void) {
     const numIterations = partitions
@@ -67,7 +67,7 @@ export function placeItems(
 export function placeItem(
     horizontalPartitions: IPartition[][],
     verticalPartitions: IPartition[][],
-    item: IItem): IItemPlacement2 {
+    item: IItem): IItemPlacementLocation {
     let x: number | null = null;
     let y: number | null = null;
 

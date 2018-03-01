@@ -37,7 +37,7 @@ export interface IItemPlacement {
     [x: number]: { [y: number]: IItem[] };
 }
 
-export interface IItemPlacement2 {
+export interface IItemPlacementLocation {
     x: number;
     y: number;
 }
@@ -117,66 +117,6 @@ export interface IBoardConfiguration {
     horizontalPartitionProviders: IPartitionProviderConfiguration[];
     verticalPartitionProviders: IPartitionProviderConfiguration[];
 }
-
-// export interface IBoard {
-//     readonly horizontalPartitionProviders: IPartitionProvider[];
-//     readonly verticalPartitionProviders: IPartitionProvider[];
-
-//     readonly items: IItem[];
-
-//     addHorizontalPartition(partition: IPartitionProvider): void;
-//     addVerticalPartition(partition: IPartitionProvider): void;
-// }
-
-// // TODO: Move
-// export class ItemValuePartition<T extends boolean | number | string | Date> implements IPartitionProvider {
-//     public readonly type = "static";
-
-//     constructor(private fieldName: string, private itemValues: T[]) { }
-
-//     getPartitions(): IPartition[] {
-//         return this.itemValues.map(i => ({
-//             label: i.toString(),
-//             value: i.toString()
-//         }));
-//     }
-
-//     get count(): number {
-//         return this.itemValues.length;
-//     }
-
-//     placeItem(item: IItem): number | null {
-//         const value = item.values[this.fieldName];
-//         if (!value) {
-//             // Cannot place in this partition
-//             return null;
-//         }
-
-//         for (let i = 0; i < this.itemValues.length; ++i) {
-//             const itemValue = this.itemValues[i];
-//             if (itemValue === value) {
-//                 return i;
-//             }
-//         }
-
-//         return null;
-//     }
-// }
-
-// export class Board implements IBoard {
-//     readonly horizontalPartitionProviders: IPartitionProvider[] = [];
-//     readonly verticalPartitionProviders: IPartitionProvider[] = [];
-
-//     items: IItem[] = [];
-
-//     addHorizontalPartition(partition: IPartitionProvider): void {
-//         this.horizontalPartitionProviders.push(partition);
-//     }
-
-//     addVerticalPartition(partition: IPartitionProvider): void {
-//         this.verticalPartitionProviders.push(partition);
-//     }
-// }
 
 // TODO...
 export interface IDropLocation {
