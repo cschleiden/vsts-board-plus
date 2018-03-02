@@ -17,7 +17,7 @@ export class CardLegend extends React.PureComponent<ICardLegendProps> {
             <Card
                 item={item}
                 settings={{
-                    showId: false
+                    showId: true
                 }}
             />
         );
