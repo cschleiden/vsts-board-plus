@@ -10,11 +10,13 @@ export interface ILegendProps {
     label: string;
 
     vertical?: boolean;
+
+    displayData?: any;
 }
 
 export class Legend extends React.PureComponent<ILegendProps> {
     render() {
-        const { type, label, vertical } = this.props;
+        const { type, label, vertical, displayData } = this.props;
 
         switch (type) {
             default:
@@ -25,7 +27,7 @@ export class Legend extends React.PureComponent<ILegendProps> {
 
             case PartitionProviderLegendType.Card:
                 return (
-                    <CardLegend label={label} />
+                    <CardLegend label={label} item={displayData} />
                 );
         }
     }

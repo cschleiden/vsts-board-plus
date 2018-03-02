@@ -35,8 +35,8 @@ export class BoardView extends React.Component<IBoardProps> {
                 <div
                     className="board"
                     style={{
-                        gridTemplateColumns: `repeat(${numLegendColumns}, minmax(24px, 24px)) repeat(${numContentColumns}, minmax(100px, 200px))`,
-                        gridTemplateRows: `repeat(${numLegendRows}, 24px) repeat(${numContentRows}, minmax(100px, auto))`
+                        gridTemplateColumns: `repeat(${numLegendColumns}, minmax(24px, max-content)) repeat(${numContentColumns}, 1.5fr)`,
+                        gridTemplateRows: `repeat(${numLegendRows}, minmax(24px, max-content)) repeat(${numContentRows}, minmax(100px, max-content))`
                     }}
                 >
                     {
@@ -95,7 +95,12 @@ export class BoardView extends React.Component<IBoardProps> {
                                     gridRow: transpose ? first : second
                                 }}
                             >
-                                <Legend type={partition.legendType} label={partition.label} vertical={transpose} />
+                                <Legend
+                                    type={partition.legendType}
+                                    label={partition.label}
+                                    vertical={transpose}
+                                    displayData={partition.displayData}
+                                />
                             </div>
                         );
                     })

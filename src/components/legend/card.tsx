@@ -5,22 +5,17 @@ import { FieldReferenceNames } from "../../model/constants";
 
 export interface ICardLegendProps {
     label: string;
+
+    item: IItem;
 }
 
 export class CardLegend extends React.PureComponent<ICardLegendProps> {
     public render(): JSX.Element {
-        const { label } = this.props;
-
-        const legendItem: IItem = {
-            id: -42,
-            values: {
-                [FieldReferenceNames.Title]: label
-            }
-        };
+        const { label, item } = this.props;
 
         return (
             <Card
-                item={legendItem}
+                item={item}
                 settings={{
                     showId: false
                 }}

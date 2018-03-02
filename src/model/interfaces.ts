@@ -28,9 +28,11 @@ export interface IPartition {
     legendType: PartitionProviderLegendType;
 
     // TODO
-    value: string;
+    value: string | number | boolean | Date;
 
     fieldName: string;
+
+    displayData?: any;
 }
 
 export interface IItemPlacement {
