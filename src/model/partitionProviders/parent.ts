@@ -42,7 +42,12 @@ const ParentPartitionProvider: IPartitionProvider = {
         const parentIds = Array.from(parentIdsSet.keys());
         var parentValues = await witService.pageFields(
             parentIds.filter(id => id > 0),
-            [FieldReferenceNames.Id, FieldReferenceNames.Title]
+            [
+                FieldReferenceNames.Id,
+                FieldReferenceNames.Title,
+                FieldReferenceNames.TeamProject,
+                FieldReferenceNames.WorkItemType
+            ]
         );
 
         const partitions = parentValues.map(parentWorkItem => ({

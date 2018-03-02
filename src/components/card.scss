@@ -17,8 +17,13 @@
 .card--header {
     display: flex;
     flex-direction: row;
+    align-items: flex-start;
 
     margin: 5px;
+}
+
+.card--icon {
+    margin-right: 5px;
 }
 
 .card--id {

@@ -5,6 +5,8 @@ import { FieldReferenceNames } from "../model/constants";
 import { DraggableProvided } from "react-beautiful-dnd";
 import { autobind } from "@uifabric/utilities";
 import { WorkItemFormNavigationService } from "TFS/WorkItemTracking/Services";
+import { WorkItemTypeColorIcon, WorkItemTypeService } from "../services/workItemTypeService";
+import { TypeIcon } from "./typeIcon";
 
 export interface ICardSettings {
     showId?: boolean;
@@ -22,10 +24,38 @@ export interface ICardProps {
     settings?: ICardSettings;
 }
 
-export class Card extends React.Component<ICardProps> {
-    public render(): JSX.Element {
+export interface ICardState {
+    iconAndColor: WorkItemTypeColorIcon;
+}
+
+export class Card extends React.Component<ICardProps, ICardState> {
+    constructor(props: ICardProps) {
+        super(props);
+
+        this.state = {
+            iconAndColor: null
+        };
+    }
+
+    componentWillMount() {
+        const { item } = this.props;
+
+        const service = new WorkItemTypeService();
+        service.getWorkItemTypeIcon(
+            item.values[FieldReferenceNames.TeamProject] as string,
+            item.values[FieldReferenceNames.WorkItemType] as string
+        ).then(typeColorIcon => {
+            this.setState({
+                iconAndColor: typeColorIcon
+            });
+        });
+    }
+
+    render(): JSX.Element {
         const { item, draggable, settings = defaultCardSettings } = this.props;
         const { id, values } = item;
+
+        const { iconAndColor } = this.state;
 
         const title = values[FieldReferenceNames.Title];
 
@@ -33,12 +63,18 @@ export class Card extends React.Component<ICardProps> {
             <div
                 className="card"
                 ref={draggable && draggable.innerRef}
-                style={draggable && draggable.draggableStyle}
                 // tslint:disable-next-line:no-any
                 {...draggable && (draggable as any).draggableProps}
                 {...draggable && draggable.dragHandleProps}
+                style={{
+                    ...draggable && draggable.draggableStyle,
+                    borderLeftColor: iconAndColor && `#${iconAndColor.color}`
+                }}
             >
                 <div className="card--header">
+                    <div className="card--icon">
+                        {iconAndColor && <TypeIcon icon={iconAndColor} />}
+                    </div>
                     {
                         settings.showId && (
                             <div className="card--id">
