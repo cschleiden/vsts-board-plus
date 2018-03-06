@@ -27,7 +27,7 @@ const TeamMembersPartitionProvider: IPartitionProvider = {
             return members.map(member => ({
                 fieldName: FieldReferenceNames.AssignedTo,
                 label: member.displayName,
-                value: member.uniqueName,
+                value: `${member.displayName} <${member.uniqueName}>`,
                 tooltip: member.uniqueName,
                 legendType: PartitionProviderLegendType.Persona,
                 displayData: member
