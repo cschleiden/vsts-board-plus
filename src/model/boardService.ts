@@ -168,7 +168,7 @@ export class BoardService {
         return result.reduce((r, c) => r.concat(c), []);
     }
 
-    async getItemsForBoard(config: IBoardConfiguration): Promise<IItem[]> {
+    async getItemsForBoard(config: IBoardConfiguration): Promise<{ [id: number]: IItem }> {
         const requiredFieldReferenceNames = await this.getRequiredFields(config);
         const pageFields = RequiredFields.concat(requiredFieldReferenceNames);
 
@@ -178,11 +178,13 @@ export class BoardService {
         const workItemIds = await witService.runQuery(queryId);
         const workItems = await witService.pageFields(workItemIds, pageFields);
 
-        return workItems.map(workItem => {
-            return {
+        const workItemMap: { [id: number]: IItem } = {};
+        workItems.forEach(workItem => {
+            workItemMap[workItem.id] = {
                 id: workItem.id,
                 values: workItem.fields
             };
         });
+        return workItemMap;
     }
 }

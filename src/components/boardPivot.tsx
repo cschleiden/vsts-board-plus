@@ -7,11 +7,10 @@ import { autobind } from "office-ui-fabric-react/lib/Utilities";
 import { dropCard, initBoard } from "../actions/board.actionsCreator";
 
 interface IBoardPivotProps {
-    items: IItem[];
-
     horizontalPartitions: IPartition[][];
     verticalPartitions: IPartition[][];
 
+    items: { [id: number]: IItem };
     cells: IItemPlacement;
 
     init(): void;
@@ -25,13 +24,14 @@ class BoardPivot extends React.PureComponent<IBoardPivotProps> {
     }
 
     render() {
-        const { horizontalPartitions, verticalPartitions, cells } = this.props;
+        const { horizontalPartitions, verticalPartitions, items, cells } = this.props;
 
         return (
             <div>
                 <BoardView
                     horizontalPartitions={horizontalPartitions}
                     verticalPartitions={verticalPartitions}
+                    items={items}
                     cells={cells}
                     onCardMove={this.onCardMove}
                 />

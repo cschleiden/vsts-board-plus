@@ -38,10 +38,10 @@ export function placeItemInPartitions(partitions: IPartition[], item: IItem): nu
 export function placeItems(
     horizontalPartitions: IPartition[][],
     verticalPartitions: IPartition[][],
-    items: IItem[]): IItemPlacement {
+    items: { [id: number]: IItem }): IItemPlacement {
     const cells: IItemPlacement = {};
 
-    for (const item of items) {
+    for (const item of Object.keys(items).map(x => items[x])) {
         const { x, y } = placeItem(horizontalPartitions, verticalPartitions, item);
 
         if (x === null || y === null) {
@@ -55,9 +55,9 @@ export function placeItems(
         }
 
         if (cells[x][y]) {
-            cells[x][y].push(item);
+            cells[x][y].push(item.id);
         } else {
-            cells[x][y] = [item];
+            cells[x][y] = [item.id];
         }
     }
 

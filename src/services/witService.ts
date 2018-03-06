@@ -27,6 +27,16 @@ export class WitService implements IWitService {
             .then(result => result.workItems.map(wi => wi.id)) as Promise<number[]>;
     }
 
+    async updateWorkItem(id: number, changedFields: { [fieldName: string]: any }): Promise<void> {
+        const changedFieldNames = Object.keys(changedFields);
+
+        await this.getClient().updateWorkItem(changedFieldNames.map(fieldName => ({
+            "op": "add",
+            "path": `/fields/${fieldName}`,
+            "value": changedFields[fieldName]
+        })), id);
+    }
+
     private getClient(): WorkItemTrackingHttpClient4 {
         return getClient();
     }

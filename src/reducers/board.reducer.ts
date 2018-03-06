@@ -7,7 +7,7 @@ import * as Actions from "./../actions/board.actions";
 const initialState = makeImmutable({
     config: null as IBoardConfiguration,
 
-    items: [] as IItem[],
+    items: {} as { [id: number]: IItem },
 
     horizontalPartitions: [] as IPartition[][],
     verticalPartitions: [] as IPartition[][],
@@ -44,48 +44,52 @@ function updateItems(state: IBoardState, items: typeof Actions.updateItems.paylo
 function updateItem(state: IBoardState, payload: typeof Actions.updateItem.payload): IBoardState {
     // TODO: Replace partitions?
 
-    const { id, fieldChanges, index } = payload;
+    const { id, fieldChanges, index, inProgress } = payload;
     const { items, horizontalPartitions, verticalPartitions } = state;
 
-    const itemIndex = items.findIndex(i => i.id === id);
-    const item = items[itemIndex];
+    const oldItem = state.items[id];
 
     // Determine old position    
-    const { x: oldX, y: oldY } = placeItem(horizontalPartitions, verticalPartitions, item);
+    const { x: oldX, y: oldY } = placeItem(horizontalPartitions, verticalPartitions, oldItem);
 
     // Update item
-    state = state.__set(x => x.items, oldItems => {
-        const updatedItems = oldItems && oldItems.slice(0) || [];
-        updatedItems[itemIndex] = {
-            ...item,
-            values: {
-                ...item.values,
-                ...fieldChanges
-            }
-        };
-        return updatedItems;
+    state = state.__set(x => x.items[id], {
+        ...oldItem,
+        values: {
+            ...oldItem.values,
+            ...fieldChanges
+        },
+        inProgress
     });
 
     // Remove from source
     state = state.__set(x => x.placedItems[oldX][oldY], items => {
-        const idx = items.findIndex(i => i.id === id);
-        const items2 = items.slice(0);
-        items2.splice(idx, 1);
-        return items2;
+        return items.filter(i => i !== id);
     });
 
     // Add to new cell
-    const updatedItem = state.items[itemIndex];
+    const updatedItem = state.items[id];
     const { x, y } = placeItem(horizontalPartitions, verticalPartitions, updatedItem);
     if (x !== null && y !== null) {
         state = state.__set(d => d.placedItems[x][y], items => {
             const items2 = items && items.slice(0) || [];
-            items2.splice(index, 0, item);
+            items2.splice(index, 0, id);
             return items2;
         });
     }
 
     return state;
+}
+
+function updateItemStatus(state: IBoardState, payload: typeof Actions.updateItemStatus.payload): IBoardState {
+    const { id, inProgress, message } = payload;
+    const { items } = state;
+
+    return state.__set(x => x.items[id], item => ({
+        ...item,
+        inProgress,
+        message: message || null
+    }));
 }
 
 export default reducerMap(
@@ -94,6 +98,7 @@ export default reducerMap(
         [Actions.init, init],
         [Actions.updateItem, updateItem],
         [Actions.updateItems, updateItems],
+        [Actions.updateItemStatus, updateItemStatus],
         [Actions.refresh, refresh]
     ]
 );

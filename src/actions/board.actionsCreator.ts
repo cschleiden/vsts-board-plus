@@ -1,8 +1,10 @@
 import { IDropLocation, IFieldValueMap } from "../model/interfaces";
-import { init, updateItem } from "./board.actions";
+import { init, updateItem, updateItemStatus } from "./board.actions";
 import getPartitionProvider from "../model/partitionProviders";
 import { asyncActionCreator } from "./actions";
 import { BoardService } from "../model/boardService";
+import { WitService } from "../services/witService";
+import { toArray } from "../utils/map";
 
 export const initBoard = (boardId: string) => asyncActionCreator(async (dispatch) => {
     const boardService = new BoardService();
@@ -10,10 +12,12 @@ export const initBoard = (boardId: string) => asyncActionCreator(async (dispatch
     const config = await boardService.getBoardConfigurationById(boardId);
     const items = await boardService.getItemsForBoard(config);
 
+    const itemArray = toArray(items);
+
     const verticalPartitions = await Promise.all(
-        config.verticalPartitionProviders.map(hp => getPartitionProvider(hp.type).getPartitions(hp, items)));
+        config.verticalPartitionProviders.map(hp => getPartitionProvider(hp.type).getPartitions(hp, itemArray)));
     const horizontalPartitions = await Promise.all(
-        config.horizontalPartitionProviders.map(hp => getPartitionProvider(hp.type).getPartitions(hp, items)));
+        config.horizontalPartitionProviders.map(hp => getPartitionProvider(hp.type).getPartitions(hp, itemArray)));
 
     return dispatch(init({
         config,
@@ -38,10 +42,24 @@ export const createBoard = () => asyncActionCreator(async (dispatch) => {
 export const dropCard = (id: number, location: IDropLocation, index: number) => asyncActionCreator(async (dispatch) => {
     const fieldChanges: IFieldValueMap = {};
 
-    // TODO: Update item
-    // for (const partition of location.partitions) {
-    //     fieldChanges[partition.fieldName] = partition.value;
-    // }
+    for (const partition of location.partitions) {
+        fieldChanges[partition.fieldName] = partition.value;
+    }
 
-    return dispatch(updateItem({ id, fieldChanges, index }));
+    // Dispatch UI change immediately
+    dispatch(updateItem({ id, fieldChanges, index, inProgress: true }));
+
+    try {
+        const witService = new WitService();
+        await witService.updateWorkItem(id, fieldChanges);
+
+        return dispatch(updateItemStatus({ id, inProgress: false }));
+    } catch (error) {
+        // TODO: Handle errors...
+        return dispatch(updateItemStatus({ 
+            id, 
+            inProgress: true, 
+            message: error && error.serverError && error.serverError.message 
+        }));
+    }
 });

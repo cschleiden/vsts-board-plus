@@ -10,6 +10,9 @@ export interface IItem {
     id: number;
 
     values: IFieldValueMap;
+
+    inProgress?: boolean;
+    message?: string;
 }
 
 export interface IEntry {
@@ -38,7 +41,7 @@ export interface IPartition {
 }
 
 export interface IItemPlacement {
-    [x: number]: { [y: number]: IItem[] };
+    [x: number]: { [y: number]: number[] };
 }
 
 export interface IItemPlacementLocation {

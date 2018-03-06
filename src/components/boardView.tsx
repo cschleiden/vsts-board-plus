@@ -1,7 +1,7 @@
 import { autobind } from "office-ui-fabric-react/lib/Utilities";
 import "./board.scss";
 import * as React from "react";
-import { IPartition, IDropLocation, IItemPlacement } from "../model/interfaces";
+import { IPartition, IDropLocation, IItemPlacement, IItem } from "../model/interfaces";
 import { css } from "../utils/css";
 import { DragDropContext, Droppable, DroppableProvided, DroppableStateSnapshot, Draggable, DropResult } from "react-beautiful-dnd";
 import { iteratePartitions } from "../model/board";
@@ -12,6 +12,7 @@ export interface IBoardProps {
     horizontalPartitions: IPartition[][];
     verticalPartitions: IPartition[][];
 
+    items: { [id: number]: IItem };
     cells: IItemPlacement;
 
     onCardMove(id: number, drop: IDropLocation, index: number): void;
@@ -112,7 +113,7 @@ export class BoardView extends React.Component<IBoardProps> {
     }
 
     private _renderItems(numContentColumns: number, numContentRows: number): JSX.Element[] {
-        const { verticalPartitions, horizontalPartitions, cells } = this.props;
+        const { verticalPartitions, horizontalPartitions, cells, items } = this.props;
 
         // Lay out cells
         const numLegendColumns = verticalPartitions.length;
@@ -147,23 +148,28 @@ export class BoardView extends React.Component<IBoardProps> {
                             >
                                 {
                                     /* Render current items in cell */
-                                    cellItems.map((item, index) => (
-                                        <Draggable
-                                            draggableId={`${item.id}`}
-                                            key={item.id}
-                                            {...{ index }}
-                                        >
-                                            {(dragProvided, dragSnapshot) => (
-                                                <div>
-                                                    <Card
-                                                        item={item}
-                                                        draggable={dragProvided}
-                                                    />
-                                                    {dragProvided.placeholder}
-                                                </div>
-                                            )}
-                                        </Draggable>
-                                    ))
+                                    cellItems.map((id, index) => {
+                                        const item = items[id];
+
+                                        return (
+                                            <Draggable
+                                                draggableId={`${id}`}
+                                                key={id}
+                                                {...{ index }}
+                                                isDragDisabled={item.inProgress}
+                                            >
+                                                {(dragProvided, dragSnapshot) => (
+                                                    <div>
+                                                        <Card
+                                                            item={item}
+                                                            draggable={dragProvided}
+                                                        />
+                                                        {dragProvided.placeholder}
+                                                    </div>
+                                                )}
+                                            </Draggable>
+                                        );
+                                    })
                                 }
 
                                 {provided.placeholder}
