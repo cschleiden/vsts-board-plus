@@ -3,6 +3,7 @@ import { Dropdown } from "office-ui-fabric-react/lib/Dropdown";
 import { ITeamReference, IPartitionProviderTemplateInput } from "../../../model/interfaces";
 import { ISelectableOption } from "office-ui-fabric-react/lib/utilities/selectableOption/SelectableOption.types";
 import { autobind } from "@uifabric/utilities";
+import { getClient } from "TFS/Core/RestClient";
 
 export interface ITeamSelectorProps {
     input: IPartitionProviderTemplateInput;
@@ -14,6 +15,7 @@ export interface ITeamSelectorProps {
 
 export interface ITeamSelectorState {
     teams: ITeamReference[];
+    loading: boolean;
 }
 
 interface ITeamSelectorOption extends ISelectableOption, ITeamReference {
@@ -24,32 +26,32 @@ export class TeamSelector extends React.PureComponent<ITeamSelectorProps, ITeamS
         super(props);
 
         this.state = {
-            teams: []
+            teams: [],
+            loading: true
         };
     }
 
     async componentDidMount() {
-        const teams: ITeamReference[] = [
-            {
-                name: "Team Blue",
-                id: "teamblue"
-            },
-            {
-                name: "Team Red",
-                id: "teamread"
-            }
-        ];
+        const webContext = VSS.getWebContext();
+        const teams = await getClient().getTeams(webContext.project.id);
+
         this.setState({
-            teams
+            teams: teams.map(t => ({
+                id: t.id,
+                name: t.name
+            })),
+            loading: false
         });
     }
 
     render(): JSX.Element {
         const { input, value } = this.props;
-        const { teams } = this.state;
+        const { loading, teams } = this.state;
 
         return (
             <Dropdown
+                disabled={loading}
+                placeHolder={loading && "Loading..."}
                 onChanged={this.onChanged}
                 label={input.label || "Select team"}
                 selectedKey={value && value.id}

@@ -3,6 +3,7 @@ import * as React from "react";
 import { DefaultLegend } from "./default";
 import { CardLegend } from "./card";
 import { PartitionProviderLegendType } from "../../model/interfaces";
+import { PersonaLegend } from "./persona";
 
 export interface ILegendProps {
     type: PartitionProviderLegendType;
@@ -28,6 +29,11 @@ export class Legend extends React.PureComponent<ILegendProps> {
             case PartitionProviderLegendType.Card:
                 return (
                     <CardLegend label={label} item={displayData} />
+                );
+
+            case PartitionProviderLegendType.Persona:
+                return (
+                    <PersonaLegend label={label} identityRef={displayData} />
                 );
         }
     }

@@ -4,8 +4,11 @@ import {
     IPartition,
     IItem,
     PartitionProviderType,
-    PartitionProviderLegendType
+    PartitionProviderLegendType,
+    ITeamReference
 } from "../interfaces";
+import { FieldReferenceNames } from "../constants";
+import { getClient } from "TFS/Core/RestClient";
 
 /**
  * Partition provider that creates one partition for every unique field value
@@ -14,26 +17,22 @@ const TeamMembersPartitionProvider: IPartitionProvider = {
     type: PartitionProviderType.Parent,
 
     getRequiredFields(configuration: IPartitionProviderConfiguration): Promise<string[]> {
-        return Promise.resolve([]);
+        return Promise.resolve([FieldReferenceNames.AssignedTo]);
     },
 
     getPartitions(configuration: IPartitionProviderConfiguration, items: IItem[]): Promise<IPartition[]> {
-        return Promise.resolve(
-            [
-                {
-                    fieldName: "TeamMembers",
-                    label: "Christopher Schleiden",
-                    value: "Christopher Schleiden",
-                    legendType: PartitionProviderLegendType.Text,
-                },
-                {
-                    fieldName: "TeamMembers",
-                    label: "John Doe",
-                    value: "John Doe",
-                    legendType: PartitionProviderLegendType.Text,
-                }
-            ] as IPartition[]
-        );
+        const team: ITeamReference = configuration.inputs["team"];
+        const webContext = VSS.getWebContext();
+        return getClient().getTeamMembers(webContext.project.id, team.id).then(members => {
+            return members.map(member => ({
+                fieldName: FieldReferenceNames.AssignedTo,
+                label: member.displayName,
+                value: member.uniqueName,
+                tooltip: member.uniqueName,
+                legendType: PartitionProviderLegendType.Persona,
+                displayData: member
+            }));
+        }) as Promise<IPartition[]>;
     }
 };
 

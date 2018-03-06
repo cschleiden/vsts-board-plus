@@ -33,6 +33,8 @@ export interface IPartition {
     fieldName: string;
 
     displayData?: any;
+
+    tooltip?: string;
 }
 
 export interface IItemPlacement {
@@ -101,7 +103,8 @@ export enum PartitionProviderType {
 
 export enum PartitionProviderLegendType {
     Text,
-    Card
+    Card,
+    Persona
 }
 
 export interface IPartitionProviderConfiguration {
