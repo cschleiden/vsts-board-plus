@@ -5,7 +5,8 @@ import {
     IItem,
     PartitionProviderType,
     PartitionProviderLegendType,
-    ITeamReference
+    ITeamReference,
+    IFieldValueMap
 } from "../interfaces";
 import { FieldReferenceNames } from "../constants";
 import { getClient } from "TFS/Core/RestClient";
@@ -33,6 +34,9 @@ const TeamMembersPartitionProvider: IPartitionProvider = {
                 displayData: member
             }));
         }) as Promise<IPartition[]>;
+    },
+
+    updateItem(configuration: IPartitionProviderConfiguration, itemId: number, fieldChanges: IFieldValueMap): Promise<void> | void {
     }
 };
 

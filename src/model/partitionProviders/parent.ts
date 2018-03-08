@@ -4,7 +4,8 @@ import {
     IPartition,
     IItem,
     PartitionProviderType,
-    PartitionProviderLegendType
+    PartitionProviderLegendType,
+    IFieldValueMap
 } from "../interfaces";
 import { WitService } from "../../services/witService";
 import { FieldReferenceNames } from "../constants";
@@ -77,10 +78,16 @@ const ParentPartitionProvider: IPartitionProvider = {
         return partitions;
     },
 
-    // updateItem(item: IItem, partition: IPartition): Promise<void> {
-    //     // Update item, change parent link
-    //     return Promise.resolve(null);
-    // }
+    async updateItem(configuration: IPartitionProviderConfiguration, itemId: number, fieldChanges: IFieldValueMap): Promise<void> {
+        if (fieldChanges[FieldName]) {
+            const newParentId: number = fieldChanges[FieldName] as number;
+
+            var witService = new WitService();
+            await witService.updateParent(itemId, newParentId);
+
+            delete fieldChanges[FieldName];
+        }
+    }
 };
 
 export default ParentPartitionProvider;

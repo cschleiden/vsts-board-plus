@@ -5,7 +5,8 @@ import {
     IItem,
     PartitionProviderType,
     IFieldReference,
-    PartitionProviderLegendType
+    PartitionProviderLegendType,
+    IFieldValueMap
 } from "../interfaces";
 
 /**
@@ -33,6 +34,10 @@ const FieldValuePartitionProvider: IPartitionProvider = {
                 legendType: PartitionProviderLegendType.Text
             }))
         );
+    },
+
+    updateItem(configuration: IPartitionProviderConfiguration, itemId: number, fieldChanges: IFieldValueMap): Promise<void> | void {
+        // Do nothing, generic update code will handle this
     }
 };
 

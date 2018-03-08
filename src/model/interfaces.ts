@@ -55,6 +55,8 @@ export interface IPartitionProvider {
     getRequiredFields(configuration: IPartitionProviderConfiguration): Promise<string[]>;
 
     getPartitions(configuration: IPartitionProviderConfiguration, items: IItem[]): Promise<IPartition[]>;
+
+    updateItem(configuration: IPartitionProviderConfiguration, itemId: number, fieldChanges: IFieldValueMap): Promise<void> | void;
 }
 
 export interface IPartitionProviderInputs {

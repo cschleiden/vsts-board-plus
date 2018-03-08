@@ -39,7 +39,11 @@ export const createBoard = () => asyncActionCreator(async (dispatch) => {
     }))
 });
 
-export const dropCard = (id: number, location: IDropLocation, index: number) => asyncActionCreator(async (dispatch) => {
+export const dropCard = (id: number, location: IDropLocation, index: number) => asyncActionCreator(async (dispatch, getState) => {
+    const state = getState();
+    const { board } = state;
+    const { config } = board;
+
     const fieldChanges: IFieldValueMap = {};
 
     for (const partition of location.partitions) {
@@ -50,16 +54,33 @@ export const dropCard = (id: number, location: IDropLocation, index: number) => 
     dispatch(updateItem({ id, fieldChanges, index, inProgress: true }));
 
     try {
-        const witService = new WitService();
-        await witService.updateWorkItem(id, fieldChanges);
+        // Update item
+        const providers = [...config.verticalPartitionProviders, ...config.horizontalPartitionProviders].map(pp => ({ provider: getPartitionProvider(pp.type), config: pp }));
+
+        for (const { provider, config } of providers) {
+            const result = provider.updateItem(config, id, fieldChanges);
+            if (isPromise(result)) {
+                await result;
+            }
+        }
+
+        // Execute final field changes
+        if (Object.keys(fieldChanges).length > 0) {
+            const witService = new WitService();
+            await witService.updateWorkItem(id, fieldChanges);
+        }
 
         return dispatch(updateItemStatus({ id, inProgress: false }));
     } catch (error) {
         // TODO: Handle errors...
-        return dispatch(updateItemStatus({ 
-            id, 
-            inProgress: true, 
-            message: error && error.serverError && error.serverError.message 
+        return dispatch(updateItemStatus({
+            id,
+            inProgress: true,
+            message: error && error.serverError && error.serverError.message
         }));
     }
 });
+
+function isPromise<T>(value: Promise<T> | T): value is Promise<T> {
+    return value && !!value["then"];
+}

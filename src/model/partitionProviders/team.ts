@@ -4,8 +4,10 @@ import {
     IPartition,
     IItem,
     PartitionProviderType,
-    PartitionProviderLegendType
+    PartitionProviderLegendType,
+    IFieldValueMap
 } from "../interfaces";
+import { FieldReferenceNames } from "../constants";
 
 /**
  * Partition provider that creates one partition for every unique field value
@@ -20,12 +22,16 @@ const TeamPartitionProvider: IPartitionProvider = {
     getPartitions(configuration: IPartitionProviderConfiguration, items: IItem[]): Promise<IPartition[]> {
         return Promise.resolve(
             [{
-                fieldName: "Team",
+                fieldName: FieldReferenceNames.AreaPath,
                 label: "Team",
                 value: null,
                 legendType: PartitionProviderLegendType.Text,
             } as IPartition]
         );
+    },
+
+    updateItem(configuration: IPartitionProviderConfiguration, itemId: number, fieldChanges: IFieldValueMap): Promise<void> | void {
+        // TODO
     }
 };
 

@@ -5,7 +5,8 @@ import {
     IItem,
     PartitionProviderType,
     IFieldReference,
-    PartitionProviderLegendType
+    PartitionProviderLegendType,
+    IFieldValueMap
 } from "../interfaces";
 
 export interface IStaticPartitionProviderInputs {
@@ -60,6 +61,9 @@ const Provider: IPartitionProvider = {
             fieldName: partition.field.referenceName,
             legendType: PartitionProviderLegendType.Text
         })));
+    },
+
+    updateItem(configuration: IPartitionProviderConfiguration, itemId: number, fieldChanges: IFieldValueMap): Promise<void> | void {
     }
 };
 
