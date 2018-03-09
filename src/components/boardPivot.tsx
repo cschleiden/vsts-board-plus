@@ -13,16 +13,10 @@ interface IBoardPivotProps {
     items: { [id: number]: IItem };
     cells: IItemPlacement;
 
-    init(): void;
     onDrop(id: number, drop: IDropLocation, index: number): void;
 }
 
 class BoardPivot extends React.PureComponent<IBoardPivotProps> {
-    componentWillMount() {
-        const { init } = this.props;
-        init();
-    }
-
     render() {
         const { horizontalPartitions, verticalPartitions, items, cells } = this.props;
 
@@ -60,7 +54,6 @@ export default connect(
     },
     (dispatch) => {
         return {
-            init: () => { dispatch(initBoard("test-id")); },
             onDrop: (id: number, drop: IDropLocation, index: number) => { dispatch(dropCard(id, drop, index)); }
         };
     }

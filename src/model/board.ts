@@ -24,15 +24,22 @@ export function iteratePartitions(partitions: IPartition[][], callback: (partiti
 }
 
 export function placeItemInPartitions(partitions: IPartition[], item: IItem): number {
+    let fallback: number | null = null;
+
     for (let i = 0; i < partitions.length; ++i) {
         const partition = partitions[i];
 
-        if (partition.value === item.values[partition.fieldName]) {
+        if (partition.value === null) {
+            fallback = i;
+        }
+
+        // Partition values might be set as string
+        if (partition.value == item.values[partition.fieldName]) {
             return i;
         }
     }
 
-    return null;
+    return fallback;
 }
 
 export function placeItems(

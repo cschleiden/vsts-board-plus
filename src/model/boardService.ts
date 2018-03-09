@@ -130,6 +130,8 @@ const RequiredFields: string[] = [
     FieldReferenceNames.TeamProject
 ];
 
+const CollectionName = "boards";
+
 export class BoardService {
     async createBoard(): Promise<IBoardConfiguration> {
         return {
@@ -142,15 +144,21 @@ export class BoardService {
     }
 
     async getBoards(): Promise<IBoardConfiguration[]> {
-        return [_config];
+        return this.getService().then((service: ExtensionDataService) => {
+            return service.getDocuments(CollectionName);
+        });
     }
 
     async getBoardConfigurationById(id: string): Promise<IBoardConfiguration> {
-        return _config;
+        return this.getService().then(service => {
+            return service.getDocument(CollectionName, id);
+        });
     }
 
     async saveBoardConfiguration(config: IBoardConfiguration): Promise<void> {
-        _config = config;
+        return this.getService().then(service => {
+            return service.setDocument(CollectionName, config);
+        });
     }
 
     async getRequiredFields(config: IBoardConfiguration): Promise<string[]> {
@@ -186,5 +194,9 @@ export class BoardService {
             };
         });
         return workItemMap;
+    }
+
+    private getService(): Promise<ExtensionDataService> {
+        return VSS.getService(VSS.ServiceIds.ExtensionData) as Promise<ExtensionDataService>;
     }
 }

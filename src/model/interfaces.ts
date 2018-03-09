@@ -103,7 +103,9 @@ export enum PartitionProviderType {
 
     Iterations,
     Team,
-    TeamMembers
+    TeamMembers,
+
+    Star
 }
 
 export enum PartitionProviderLegendType {

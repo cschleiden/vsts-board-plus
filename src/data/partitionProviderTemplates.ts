@@ -16,6 +16,20 @@ const templates: IPartitionProviderTemplate[] = [
         type: PartitionProviderType.FieldValue
     },
     {
+        id: "star",
+        displayName: "Catch-All",
+        description: "Generates a single partition that accepts every work item.",
+        inputs: [
+            {
+                type: TemplateInputTypes.TextInput,
+                label: "Label",
+                inputKey: "label"
+            }
+        ],
+        legendType: PartitionProviderLegendType.Text,
+        type: PartitionProviderType.Star
+    },
+    {
         id: "static",
         displayName: "Static",
         description: "Generates manually configured partitions.",

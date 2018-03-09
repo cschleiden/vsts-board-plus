@@ -4,6 +4,7 @@ import FieldValuePartitionProvider from "./fieldValue";
 import ParentPartitionProvider from "./parent";
 import TeamPartitionProvider from "./team";
 import TeamMembersPartitionProvider from "./teamMembers";
+import StarPartitionProvider from "./star";
 
 export default function getPartitionProvider(type: PartitionProviderType): IPartitionProvider {
     switch (type) {
@@ -21,6 +22,9 @@ export default function getPartitionProvider(type: PartitionProviderType): IPart
 
         case PartitionProviderType.TeamMembers:
             return TeamMembersPartitionProvider;
+
+        case PartitionProviderType.Star:
+            return StarPartitionProvider;
 
         default:
             throw new Error("Unknown partition provider");

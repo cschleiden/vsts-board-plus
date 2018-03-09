@@ -26,17 +26,25 @@ export class WitService implements IWitService {
 
     runQuery(queryId: string): Promise<number[]> {
         return this.getClient().queryById(queryId)
-            .then(result => result.workItems.map(wi => wi.id)) as Promise<number[]>;
+            .then(result => {
+                if (result.workItemRelations) {
+                    return result.workItemRelations.map(x => x.target.id);
+                } else {
+                    result.workItems.map(wi => wi.id);
+                }
+            }) as Promise<number[]>;
     }
 
     async updateWorkItem(id: number, changedFields: { [fieldName: string]: any }): Promise<void> {
         const changedFieldNames = Object.keys(changedFields);
 
-        await this.getClient().updateWorkItem(changedFieldNames.map(fieldName => ({
-            "op": "add",
-            "path": `/fields/${fieldName}`,
-            "value": changedFields[fieldName]
-        })), id);
+        await this.getClient().updateWorkItem(changedFieldNames
+            .filter(fieldName => changedFields[fieldName] != null)
+            .map(fieldName => ({
+                "op": "add",
+                "path": `/fields/${fieldName}`,
+                "value": changedFields[fieldName]
+            })), id);
     }
 
     async updateParent(id: number, newParentId: number): Promise<void> {

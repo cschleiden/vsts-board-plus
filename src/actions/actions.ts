@@ -1,6 +1,5 @@
-import { Action as ReduxAction } from "redux";
+import { Action as ReduxAction, Dispatch } from "redux";
 import { IState } from "../reducers";
-import { Dispatch } from "redux";
 import { ThunkAction } from "redux-thunk";
 
 export interface IAction<T> extends ReduxAction {
