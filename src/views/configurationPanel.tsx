@@ -8,14 +8,15 @@ import { autobind } from "@uifabric/utilities";
 import { PrimaryButton, DefaultButton } from "office-ui-fabric-react/lib/Button";
 import { cancelBoardConfiguration } from "../actions/nav.actionsCreators";
 import { TextField } from "office-ui-fabric-react/lib/TextField";
-import { Direction, PartitionProviderType, IPartitionProviderConfiguration, IPartitionProviderInputs } from "../model/interfaces";
-import { addTemplate, removeTemplate, updateName, updateQuery, updateInputs, saveConfig } from "../actions/configuration.actionsCreators";
-import { ChoiceGroup } from "office-ui-fabric-react/lib/ChoiceGroup";
+import { Direction, PartitionProviderType, IPartitionProviderConfiguration, IPartitionProviderInputs, DataSourceType } from "../model/interfaces";
+import { addTemplate, removeTemplate, updateName, updateQuery, updateInputs, saveConfig, updateDataSource } from "../actions/configuration.actionsCreators";
+import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react/lib/ChoiceGroup";
 
 interface IConfigurationPanelProps {
     showPanel: boolean;
 
     name: string;
+    dataSource: DataSourceType;
     queryId: string;
     horizontalPartitionProviders: IPartitionProviderConfiguration[];
     verticalPartitionProviders: IPartitionProviderConfiguration[];
@@ -34,6 +35,7 @@ interface IConfigurationPanelProps {
 
     onNameChanged(name: string): void;
     onQueryChanged(queryId: string): void;
+    onDataSourceChanged(dataSource: DataSourceType): void;
 }
 
 class ConfigurationPanel extends React.Component<IConfigurationPanelProps> {
@@ -44,6 +46,7 @@ class ConfigurationPanel extends React.Component<IConfigurationPanelProps> {
             remove,
             name,
             onUpdateInputs,
+            dataSource = DataSourceType.Query,
             queryId,
             horizontalPartitionProviders,
             verticalPartitionProviders,
@@ -65,19 +68,20 @@ class ConfigurationPanel extends React.Component<IConfigurationPanelProps> {
                 <h3>Data Source</h3>
 
                 <ChoiceGroup
-                    defaultSelectedKey={"query"}
+                    defaultSelectedKey={dataSource.toString()}
                     options={[
                         {
-                            key: "query",
+                            key: DataSourceType.Query.toString(),
                             text: "Query",
                             iconProps: { iconName: "QueryList" }
                         },
                         {
-                            key: "backlog",
+                            key: DataSourceType.Backlog.toString(),
                             text: "Backlog",
                             iconProps: { iconName: "Backlog" }
                         }
                     ]}
+                    onChange={this._onDataSourceChanged}
                 />
 
                 <TextField label="Query" value={queryId} onChanged={onQueryChanged} />
@@ -118,15 +122,41 @@ class ConfigurationPanel extends React.Component<IConfigurationPanelProps> {
             </div>
         );
     }
+
+    @autobind
+    private _onDataSourceChanged(_, item: IChoiceGroupOption) {
+        const { onDataSourceChanged } = this.props;
+
+        let dataSource: DataSourceType;
+
+        switch (item.key) {
+            case DataSourceType.Backlog.toString():
+                dataSource = DataSourceType.Backlog;
+                break;
+
+            case DataSourceType.Query.toString():
+                dataSource = DataSourceType.Query;
+                break;
+        }
+
+        onDataSourceChanged(dataSource);
+    }
 }
 
 export default connect(
     (state: IState) => {
-        const { name, queryId, horizontalPartitionProviders, verticalPartitionProviders } = state.configuration;
+        const {
+            name,
+            dataSource,
+            queryId,
+            horizontalPartitionProviders,
+            verticalPartitionProviders
+        } = state.configuration;
 
         return {
             showPanel: state.nav.configurationOpen,
             name,
+            dataSource,
             queryId,
             horizontalPartitionProviders,
             verticalPartitionProviders
@@ -141,6 +171,7 @@ export default connect(
 
         onNameChanged: (name: string) => { dispatch(updateName(name)); },
         onQueryChanged: (queryId: string) => { dispatch(updateQuery(queryId)); },
+        onDataSourceChanged: (dataSource: DataSourceType) => { dispatch(updateDataSource(dataSource)); },
 
         onUpdateInputs: (
             direction: Direction,

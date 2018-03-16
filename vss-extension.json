@@ -1,6 +1,6 @@
 {
     "manifestVersion": 1,
-    "version": "0.0.12",
+    "version": "0.0.13",
     "name": "Boards+",
     "scopes": [
         "vso.work_write"

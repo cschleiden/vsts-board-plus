@@ -2,6 +2,7 @@ import { makeImmutable } from "immuts";
 import { reducerMap } from "./reducers";
 import * as Actions from "../actions/configuration.actions";
 import { IPartitionProviderConfiguration, IBoardConfiguration } from "../model/interfaces";
+import { IAction } from "../actions/actions";
 
 const initialState = makeImmutable({
 } as IBoardConfiguration);
@@ -44,6 +45,10 @@ function setQuery(state: IConfigurationState, queryId: typeof Actions.setQuery.p
     return state.__set(x => x.queryId, queryId);
 }
 
+function setDataSource(state: IConfigurationState, dataSource: typeof Actions.setDataSource.payload): IConfigurationState {
+    return state.__set(x => x.dataSource, dataSource);
+}
+
 function updateInputs(state: IConfigurationState, payload: typeof Actions.updateInputs.payload): IConfigurationState {
     const { index, direction, inputs } = payload;
 
@@ -62,6 +67,7 @@ export default reducerMap(
         [Actions.removePartition, removeTemplate],
         [Actions.setName, setName],
         [Actions.setQuery, setQuery],
+        [Actions.setDataSource, setDataSource],
         [Actions.updateInputs, updateInputs]
     ]
 );

@@ -1,5 +1,5 @@
 import { makeAction } from "./actions";
-import { PartitionProviderType, IBoardConfiguration, Direction, IPartitionProviderInputs } from "../model/interfaces";
+import { PartitionProviderType, IBoardConfiguration, Direction, IPartitionProviderInputs, DataSourceType } from "../model/interfaces";
 
 export const setConfig = makeAction<IBoardConfiguration>("config-set");
 
@@ -16,6 +16,8 @@ export const removePartition = makeAction<{
 export const setName = makeAction<string>("config-set-name");
 
 export const setQuery = makeAction<string>("config-set-query");
+
+export const setDataSource = makeAction<DataSourceType>("config-set-data-source");
 
 export const updateInputs = makeAction<{
     direction: Direction;

@@ -1,3 +1,5 @@
+import { isGuid } from "./guid";
+
 //
 // Copyright Mohit Bagra - https://github.com/mohitbagra/vsts-extensions/blob/master/src/Library/Utilities/Identity.ts
 //
@@ -141,9 +143,4 @@ function parseIdAndUniqueName(str: string): { id: string, uniqueName: string } {
     else {
         return { id: parts[0], uniqueName: parts[1] };
     }
-}
-
-function isGuid(str: string): boolean {
-    const guidRegex = /^\{?([\dA-F]{8})-?([\dA-F]{4})-?([\dA-F]{4})-?([\dA-F]{4})-?([\dA-F]{12})\}?$/i;
-    return guidRegex.test(str);
 }

@@ -1,7 +1,7 @@
 import { asyncActionCreator } from "./actions";
 import * as Actions from "./configuration.actions";
 import * as NavActions from "./nav.actions";
-import { PartitionProviderType, Direction, IPartitionProviderInputs } from "../model/interfaces";
+import { PartitionProviderType, Direction, IPartitionProviderInputs, DataSourceType } from "../model/interfaces";
 import { BoardService } from "../model/boardService";
 import { initBoard } from "./board.actionsCreator";
 
@@ -21,6 +21,10 @@ export const removeTemplate = (direction: Direction, index: number) => asyncActi
 
 export const updateName = (name: string) => asyncActionCreator(async (dispatch) => {
     return dispatch(Actions.setName(name));
+});
+
+export const updateDataSource = (dataSource: DataSourceType) => asyncActionCreator(async (dispatch) => {
+    return dispatch(Actions.setDataSource(dataSource));
 });
 
 export const updateQuery = (queryId: string) => asyncActionCreator(async (dispatch) => {

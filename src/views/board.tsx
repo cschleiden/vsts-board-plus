@@ -26,7 +26,7 @@ class Board extends React.Component<IBoardProps> {
         const { board } = this.props;
 
         return (
-            <Hub className="board-hub" hubViewState={this.hubViewState} hideFullScreenToggle={false}>
+            <Hub className="board-hub" hubViewState={this.hubViewState} hideFullScreenToggle={true}>
                 <HubHeader
                     title={board && board.name}
                     breadcrumbItems={

@@ -32,7 +32,7 @@ class DirectoryView extends React.Component<DirectoryViewProps> {
         const { boards } = this.props;
 
         return (
-            <Hub className="directory-hub" hubViewState={this.hubViewState} hideFullScreenToggle={false}>
+            <Hub className="directory-hub" hubViewState={this.hubViewState} hideFullScreenToggle={true}>
                 <HubHeader
                     title={"Boards+"}
                 />

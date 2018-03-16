@@ -124,6 +124,7 @@ export interface IBoardConfiguration {
     id: string;
     name: string;
 
+    dataSource: DataSourceType;
     queryId: string;
 
     horizontalPartitionProviders: IPartitionProviderConfiguration[];
@@ -150,8 +151,8 @@ export interface ITeamReference {
 }
 
 export const enum DataSourceType {
-    Query,
-    Backlog
+    Query = 0,
+    Backlog = 1
 }
 
 export interface IDataSource {
