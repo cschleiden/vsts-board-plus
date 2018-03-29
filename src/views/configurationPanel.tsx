@@ -11,6 +11,7 @@ import { TextField } from "office-ui-fabric-react/lib/TextField";
 import { Direction, PartitionProviderType, IPartitionProviderConfiguration, IPartitionProviderInputs, DataSourceType } from "../model/interfaces";
 import { addTemplate, removeTemplate, updateName, updateQuery, updateInputs, saveConfig, updateDataSource } from "../actions/configuration.actionsCreators";
 import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react/lib/ChoiceGroup";
+import { QueryPicker } from "../components/configuration/dataSources/queryPicker";
 
 interface IConfigurationPanelProps {
     showPanel: boolean;
@@ -68,12 +69,12 @@ class ConfigurationPanel extends React.Component<IConfigurationPanelProps> {
                 <h3>Data Source</h3>
 
                 <ChoiceGroup
-                    defaultSelectedKey={dataSource.toString()}
+                    selectedKey={dataSource.toString()}
                     options={[
                         {
                             key: DataSourceType.Query.toString(),
                             text: "Query",
-                            iconProps: { iconName: "QueryList" }
+                            iconProps: { iconName: "QueryList" },
                         },
                         {
                             key: DataSourceType.Backlog.toString(),
@@ -84,7 +85,7 @@ class ConfigurationPanel extends React.Component<IConfigurationPanelProps> {
                     onChange={this._onDataSourceChanged}
                 />
 
-                <TextField label="Query" value={queryId} onChanged={onQueryChanged} />
+                {dataSource === DataSourceType.Query && <QueryPicker onChanged={onQueryChanged} defaultSelectedQueryId={queryId} />}
 
                 <h3>Partitions</h3>
 
@@ -125,8 +126,6 @@ class ConfigurationPanel extends React.Component<IConfigurationPanelProps> {
 
     @autobind
     private _onDataSourceChanged(_, item: IChoiceGroupOption) {
-        const { onDataSourceChanged } = this.props;
-
         let dataSource: DataSourceType;
 
         switch (item.key) {
@@ -139,6 +138,7 @@ class ConfigurationPanel extends React.Component<IConfigurationPanelProps> {
                 break;
         }
 
+        const { onDataSourceChanged } = this.props;
         onDataSourceChanged(dataSource);
     }
 }

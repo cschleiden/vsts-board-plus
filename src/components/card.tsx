@@ -78,7 +78,7 @@ export class Card extends React.Component<ICardProps, ICardState> {
                         {iconAndColor && <TypeIcon icon={iconAndColor} />}
                     </div>
                     {
-                        settings.showId && (
+                        settings.showId && id > 0 && (
                             <div className="card--id">
                                 {id}
                             </div>

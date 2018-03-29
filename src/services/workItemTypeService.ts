@@ -10,6 +10,13 @@ const cache: { [project: string]: { [typeName: string]: Promise<WorkItemTypeColo
 
 export class WorkItemTypeService {
     getWorkItemTypeIcon(project: string, typeName: string): Promise<WorkItemTypeColorIcon> {
+        if (!project || !typeName) {
+            return Promise.resolve({
+                color: "#CCCCCC",
+                icon: null
+            });
+        }
+
         if (cache[project]) {
             if (cache[project][typeName]) {
                 return cache[project][typeName];

@@ -33,11 +33,12 @@ const ParentPartitionProvider: IPartitionProvider = {
 
         const parentIdsSet = new Set<number>();
         for (const { source, target } of queryResult.workItemRelations) {
-            const parentId = source && source.id || 0;
+            if (itemMap[target.id]) {
+                const parentId = source && source.id || 0;
+                itemMap[target.id].values[FieldName] = parentId;
 
-            itemMap[target.id].values[FieldName] = parentId;
-
-            parentIdsSet.add(parentId);
+                parentIdsSet.add(parentId);
+            }
         }
 
         const parentIds = Array.from(parentIdsSet.keys());
@@ -79,12 +80,12 @@ const ParentPartitionProvider: IPartitionProvider = {
     },
 
     async updateItem(configuration: IPartitionProviderConfiguration, itemId: number, fieldChanges: IFieldValueMap): Promise<void> {
-        if (fieldChanges[FieldName]) {
+        if (fieldChanges[FieldName] !== undefined) {
+
             const newParentId: number = fieldChanges[FieldName] as number;
 
             var witService = new WitService();
             await witService.updateParent(itemId, newParentId);
-
             delete fieldChanges[FieldName];
         }
     }

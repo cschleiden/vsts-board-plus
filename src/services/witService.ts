@@ -30,7 +30,7 @@ export class WitService implements IWitService {
                 if (result.workItemRelations) {
                     return result.workItemRelations.map(x => x.target.id);
                 } else {
-                    result.workItems.map(wi => wi.id);
+                    return result.workItems.map(wi => wi.id);
                 }
             }) as Promise<number[]>;
     }

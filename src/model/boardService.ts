@@ -41,7 +41,9 @@ export class BoardService {
 
     async saveBoardConfiguration(config: IBoardConfiguration): Promise<void> {
         return this.getService().then(service => {
-            return service.setDocument(CollectionName, config);
+            return service.setDocument(CollectionName, {
+                ...config
+            });
         });
     }
 
@@ -68,16 +70,20 @@ export class BoardService {
 
         const witService = new WitService();
         const workItemIds = await witService.runQuery(queryId);
-        const workItems = await witService.pageFields(workItemIds, pageFields);
 
-        const workItemMap: { [id: number]: IItem } = {};
-        workItems.forEach(workItem => {
-            workItemMap[workItem.id] = {
-                id: workItem.id,
-                values: workItem.fields
-            };
-        });
-        return workItemMap;
+        if (workItemIds.length > 0) {
+            const workItemMap: { [id: number]: IItem } = {};
+            const workItems = await witService.pageFields(workItemIds, pageFields);
+            workItems.forEach(workItem => {
+                workItemMap[workItem.id] = {
+                    id: workItem.id,
+                    values: workItem.fields
+                };
+            });
+            return workItemMap;
+        }
+
+        return {};
     }
 
     private getService(): Promise<ExtensionDataService> {

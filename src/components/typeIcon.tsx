@@ -10,6 +10,8 @@ export class TypeIcon extends React.PureComponent<ITypeIconProps> {
     render() {
         const { icon } = this.props;
 
-        return <img className="work-item-type-icon" src={icon.icon.url} />;
+        return icon.icon && (
+            <img className="work-item-type-icon" src={icon.icon.url} />
+        );
     }
 };
